@@ -2,6 +2,7 @@ import useSWR, { mutate } from "swr";
 import axios from "axios";
 
 const API_BASE_URL = "https://online-garage-backend.onrender.com";
+// const API_BASE_URL = "http://localhost:8800";
 
 // Helper function to get token from localStorage
 const getToken = () => {
@@ -43,11 +44,21 @@ export const usePost = <TRequest, TResponse>(
   postEndpoint: string,
   getEndpointToRevalidate?: string
 ) => {
+  try {
+  } catch (error) {
+    console.error("Error in usePost hook:", error);
+    throw error; // Re-throw the error for further handling if needed
+  }
   const postData = async (data: TRequest): Promise<TResponse> => {
-    const response = await axios.post(`${API_BASE_URL}${postEndpoint}`, data);
+    const response = await axios.post(
+      `${API_BASE_URL}${postEndpoint}`,
+      data,
+      getAxiosConfig()
+    );
     if (getEndpointToRevalidate) {
       mutate(`${API_BASE_URL}${getEndpointToRevalidate}`);
     }
+
     return response.data;
   };
 
@@ -59,7 +70,11 @@ export const usePut = <TRequest, TResponse>(
   getEndpointToRevalidate?: string
 ) => {
   const putData = async (data: TRequest): Promise<TResponse> => {
-    const response = await axios.put(`${API_BASE_URL}${putEndpoint}`, data);
+    const response = await axios.put(
+      `${API_BASE_URL}${putEndpoint}`,
+      data,
+      getAxiosConfig()
+    );
     if (getEndpointToRevalidate) {
       mutate(`${API_BASE_URL}${getEndpointToRevalidate}`);
     }
@@ -74,7 +89,10 @@ export const useDelete = <TResponse>(
   getEndpointToRevalidate?: string
 ) => {
   const deleteData = async (): Promise<TResponse> => {
-    const response = await axios.delete(`${API_BASE_URL}${deleteEndpoint}`);
+    const response = await axios.delete(
+      `${API_BASE_URL}${deleteEndpoint}`,
+      getAxiosConfig()
+    );
     if (getEndpointToRevalidate) {
       mutate(`${API_BASE_URL}${getEndpointToRevalidate}`);
     }

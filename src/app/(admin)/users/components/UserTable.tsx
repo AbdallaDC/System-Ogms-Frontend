@@ -12,10 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User } from "@/types/User";
+import { User, UserListResponse } from "@/types/User";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDistanceToNow } from "date-fns";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import UserForm from "./UserForm";
+import { usePost } from "@/hooks/useApi";
+import { mutate } from "swr";
+import Link from "next/link";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -131,7 +135,7 @@ export const columns: ColumnDef<User>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const service = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -144,13 +148,15 @@ export const columns: ColumnDef<User>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(service._id)}
+              onClick={() => navigator.clipboard.writeText(user._id)}
             >
-              Copy payment ID
+              Copy user ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/users/${user._id}`}>View details</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -163,20 +169,49 @@ interface UserTableProps {
 }
 
 export default function UserTable({ data }: UserTableProps) {
-  const handleExportSelected = (selectedUsers: User[]) => {
-    console.log("Export selected:", selectedUsers);
-    // Implement your export logic here
+  const { postData } = usePost<User, UserListResponse>(
+    "/api/v1/auth/register",
+    "/api/v1/users"
+  );
+
+  const exportToCsv = (data: any[], fileName: string) => {
+    const csvContent = [
+      Object.keys(data[0]).join(","),
+      ...data.map((item) => Object.values(item).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute("href", url);
+    link.setAttribute("download", fileName);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  const handleDeleteSelected = (selectedUsers: User[]) => {
-    console.log("Delete selected:", selectedUsers);
+  // Usage in ServicesTable component
+  const handleExportAll = (allUsers: User[]) => {
+    exportToCsv(allUsers, "all-users.csv");
+  };
+
+  const handleExportSelected = (selectedUsers: User[]) => {
+    exportToCsv(selectedUsers, "selected-users.csv");
+  };
+
+  const handleDeleteSelected = (selectedUser: User[]) => {
+    console.log("Delete selected:", selectedUser);
     // Implement your delete logic here
   };
 
-  const handleExportAll = (allUsers: User[]) => {
-    console.log("Export all:", allUsers);
-    // Implement your export all logic here
+  const handleAddSubmit = async (values: unknown) => {
+    console.log("Add form values:", values);
+    // Implement your add logic here
+    postData(values as User);
   };
+
   return (
     <DataTable
       columns={columns}
@@ -187,6 +222,8 @@ export default function UserTable({ data }: UserTableProps) {
       onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
       onExportAll={handleExportAll}
+      addFormComponent={UserForm}
+      onAddSubmit={handleAddSubmit}
     />
   );
 }

@@ -17,7 +17,10 @@ import { DataTable } from "@/components/data-table";
 import { Vehicle } from "@/types/Vehicle";
 import { Booking } from "@/types/Booking";
 import { format } from "date-fns";
-import { Assign } from "@/types/Assign";
+import { Assign, AssignListResponse } from "@/types/Assign";
+import AssignForm from "./AssignForm";
+import toast from "react-hot-toast";
+import { usePost } from "@/hooks/useApi";
 
 export const columns: ColumnDef<Assign>[] = [
   {
@@ -167,6 +170,10 @@ interface AssignTableProps {
 }
 
 export default function AssignTable({ data }: AssignTableProps) {
+  const { postData } = usePost<Assign, AssignListResponse>(
+    "/api/v1/assigns",
+    "/api/v1/assigns"
+  );
   const handleExportSelected = (selectedAssigns: Assign[]) => {
     console.log("Export selected:", selectedAssigns);
     // Implement your export logic here
@@ -181,6 +188,20 @@ export default function AssignTable({ data }: AssignTableProps) {
     console.log("Export all:", allAssignments);
     // Implement your export all logic here
   };
+  const handleAddSubmit = async (values: unknown) => {
+    console.log("Add form values:", values);
+    // Implement your add logic here
+
+    try {
+      const response = await postData(values as Assign);
+
+      toast.success("Assign added successfully!");
+    } catch (error: any) {
+      console.error("Error adding assign:", error.response.data.message);
+      toast.error(error.response.data.message || "Failed to add assign");
+      return;
+    }
+  };
   return (
     <DataTable
       columns={columns}
@@ -191,6 +212,8 @@ export default function AssignTable({ data }: AssignTableProps) {
       onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
       onExportAll={handleExportAll}
+      addFormComponent={AssignForm}
+      onAddSubmit={handleAddSubmit}
     />
   );
 }

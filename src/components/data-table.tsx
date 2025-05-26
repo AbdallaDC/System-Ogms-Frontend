@@ -40,6 +40,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -51,6 +65,13 @@ interface DataTableProps<TData> {
   onExportSelected?: (selectedData: TData[]) => void;
   onDeleteSelected?: (selectedData: TData[]) => void;
   onExportAll?: (allData: TData[]) => void;
+  onAddSubmit?: (values: unknown) => Promise<void> | void;
+  addFormComponent?: React.ComponentType<{
+    onSubmit: (values: unknown) => void;
+    onClose: () => void;
+    isSubmitting?: boolean;
+  }>;
+  pageSizeOptions?: number[];
 }
 
 export function DataTable<TData>({
@@ -63,6 +84,9 @@ export function DataTable<TData>({
   onExportSelected,
   onDeleteSelected,
   onExportAll,
+  addFormComponent: AddFormComponent,
+  onAddSubmit,
+  pageSizeOptions = [10, 20, 50, 100],
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -71,6 +95,28 @@ export function DataTable<TData>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  // pagination state
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: pageSizeOptions[0] || 10,
+  });
+
+  const [isAddFormOpen, setIsAddFormOpen] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const handleFormSubmit = async (values: unknown) => {
+    if (!onAddSubmit) return;
+
+    try {
+      setIsSubmitting(true);
+      await onAddSubmit(values);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const table = useReactTable({
     data,
@@ -88,7 +134,9 @@ export function DataTable<TData>({
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
+    onPaginationChange: setPagination,
   });
   const selectedRows = table
     .getFilteredSelectedRowModel()
@@ -176,7 +224,46 @@ export function DataTable<TData>({
             )}
           </div>
         )}
+
+        <div className="flex items-center space-x-2">
+          {AddFormComponent && (
+            <div className="space-x-2">
+              <Button size="lg" onClick={() => setIsAddFormOpen(true)}>
+                New
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
+      {/* Add Form Dialog */}
+      {AddFormComponent && (
+        <Dialog
+          open={isAddFormOpen}
+          onOpenChange={(open) => {
+            // Only allow closing through the form's onClose
+            if (!open) setIsAddFormOpen(false);
+          }}
+        >
+          <DialogContent
+            onInteractOutside={(e) => {
+              // Prevent closing when clicking outside
+              e.preventDefault();
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle>Add New Entry</DialogTitle>
+              <DialogDescription>
+                Create a new entry in the system
+              </DialogDescription>
+            </DialogHeader>
+            <AddFormComponent
+              onSubmit={handleFormSubmit}
+              onClose={() => {}}
+              isSubmitting={isSubmitting}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -232,6 +319,32 @@ export function DataTable<TData>({
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
         )}
+        {/* Rows per page selector */}
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <p className="text-sm font-medium">Rows per page</p>
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(value) => {
+                table.setPageSize(Number(value));
+              }}
+            >
+              <SelectTrigger className="h-8 w-[70px]">
+                <SelectValue
+                  placeholder={table.getState().pagination.pageSize}
+                />
+              </SelectTrigger>
+              <SelectContent side="top">
+                {pageSizeOptions.map((pageSize) => (
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
+                    {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        {/* Pagination controls */}
         <div className="space-x-2">
           <Button
             variant="outline"

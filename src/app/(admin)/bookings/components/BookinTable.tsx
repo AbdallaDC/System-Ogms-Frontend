@@ -15,8 +15,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTable } from "@/components/data-table";
 import { Vehicle } from "@/types/Vehicle";
-import { Booking } from "@/types/Booking";
+import { Booking, BookingListResponse } from "@/types/Booking";
 import { format } from "date-fns";
+import BookingForm from "./BookingForm";
+import { usePost } from "@/hooks/useApi";
+import toast from "react-hot-toast";
 
 export const columns: ColumnDef<Booking>[] = [
   {
@@ -162,6 +165,10 @@ interface BookingTableProps {
 }
 
 export default function BookingTable({ data }: BookingTableProps) {
+  const { postData } = usePost<Booking, BookingListResponse>(
+    "/api/v1/bookings",
+    "/api/v1/bookings"
+  );
   const handleExportSelected = (selectedBookings: Booking[]) => {
     console.log("Export selected:", selectedBookings);
     // Implement your export logic here
@@ -176,6 +183,20 @@ export default function BookingTable({ data }: BookingTableProps) {
     console.log("Export all:", allBookings);
     // Implement your export all logic here
   };
+  const handleAddSubmit = async (values: unknown) => {
+    console.log("Add form values:", values);
+    // Implement your add logic here
+
+    try {
+      const response = await postData(values as Booking);
+
+      toast.success("Booking added successfully!");
+    } catch (error: any) {
+      console.error("Error adding booking:", error.response.data.message);
+      toast.error(error.response.data.message || "Failed to add booking");
+      return;
+    }
+  };
   return (
     <DataTable
       columns={columns}
@@ -186,6 +207,8 @@ export default function BookingTable({ data }: BookingTableProps) {
       onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
       onExportAll={handleExportAll}
+      addFormComponent={BookingForm}
+      onAddSubmit={handleAddSubmit}
     />
   );
 }

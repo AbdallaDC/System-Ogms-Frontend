@@ -23,17 +23,18 @@ import {
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { logout } from "@/utils/logout";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
 export function CustomerSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
+
   const handleLogout = () => {
     logout();
     router.push("/");
   };
-  const [activeItem, setActiveItem] = useState("cutomer-dashboard");
+
   return (
     <Sidebar>
       {/* Sidebar Header with Logo */}
@@ -55,8 +56,7 @@ export function CustomerSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Dashboard"
-                  isActive={activeItem === "cutomer-dashboard"}
-                  onClick={() => setActiveItem("cutomer-dashboard")}
+                  isActive={pathname === "/customer"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer">
@@ -65,12 +65,12 @@ export function CustomerSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="My Vehicles"
-                  isActive={activeItem === "my-vehicles"}
-                  onClick={() => setActiveItem("my-vehicles")}
+                  isActive={pathname === "/customer/vehicles"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/vehicles">
@@ -79,12 +79,12 @@ export function CustomerSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="My Bookings"
-                  isActive={activeItem === "my-bookings"}
-                  onClick={() => setActiveItem("my-bookings")}
+                  isActive={pathname === "/customer/bookings"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/bookings">
@@ -106,8 +106,7 @@ export function CustomerSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Book Service"
-                  isActive={activeItem === "book-service"}
-                  onClick={() => setActiveItem("book-service")}
+                  isActive={pathname === "/customer/book"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/book">
@@ -116,12 +115,12 @@ export function CustomerSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Service History"
-                  isActive={activeItem === "service-history"}
-                  onClick={() => setActiveItem("service-history")}
+                  isActive={pathname === "/customer/history"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/history">
@@ -130,12 +129,12 @@ export function CustomerSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Payments"
-                  isActive={activeItem === "payments"}
-                  onClick={() => setActiveItem("payments")}
+                  isActive={pathname === "/customer/payments"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/payments">
@@ -159,6 +158,7 @@ export function CustomerSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Profile"
+                  isActive={pathname === "/customer/profile"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/profile">
@@ -167,10 +167,12 @@ export function CustomerSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Settings"
+                  isActive={pathname === "/customer/settings"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/customer/settings">
@@ -179,9 +181,11 @@ export function CustomerSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <ThemeToggle />
               </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild

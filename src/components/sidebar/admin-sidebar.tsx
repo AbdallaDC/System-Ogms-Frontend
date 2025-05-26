@@ -26,15 +26,16 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { logout } from "@/utils/logout";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
 
 export function AdminSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
+
   const handleLogout = () => {
     logout();
     router.push("/");
   };
-  const [activeItem, setActiveItem] = useState("admin-dashboard");
+
   return (
     <Sidebar>
       {/* Sidebar Header with Logo */}
@@ -56,8 +57,7 @@ export function AdminSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Dashboard"
-                  isActive={activeItem === "admin-dashboard"}
-                  onClick={() => setActiveItem("admin-dashboard")}
+                  isActive={pathname === "/admin-dashboard"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/admin-dashboard">
@@ -79,8 +79,7 @@ export function AdminSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Services"
-                  isActive={activeItem === "services"}
-                  onClick={() => setActiveItem("services")}
+                  isActive={pathname === "/services"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/services">
@@ -89,12 +88,11 @@ export function AdminSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Vehicles"
-                  isActive={activeItem === "vehicles"}
-                  onClick={() => setActiveItem("vehicles")}
+                  isActive={pathname === "/vehicles"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/vehicles">
@@ -102,13 +100,12 @@ export function AdminSidebar() {
                     <span>Vehicles</span>
                   </Link>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Bookings"
-                  isActive={activeItem === "bookings"}
-                  onClick={() => setActiveItem("bookings")}
+                  isActive={pathname === "/bookings"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/bookings">
@@ -121,8 +118,7 @@ export function AdminSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Assignments"
-                  isActive={activeItem === "assignments"}
-                  onClick={() => setActiveItem("assignments")}
+                  isActive={pathname === "/assignments"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/assignments">
@@ -134,14 +130,13 @@ export function AdminSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  tooltip="Customers"
-                  isActive={activeItem === "customers"}
-                  onClick={() => setActiveItem("customers")}
+                  tooltip="Users"
+                  isActive={pathname === "/users"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
-                  <Link href="/customers">
+                  <Link href="/users">
                     <Users className="h-5 w-5" />
-                    <span>Customers</span>
+                    <span>Manage users</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -160,6 +155,7 @@ export function AdminSidebar() {
                 <SidebarMenuButton
                   asChild
                   tooltip="Settings"
+                  isActive={pathname === "/settings"}
                   className="data-[active=true]:bg-primary data-[active=true]:text-white"
                 >
                   <Link href="/settings">
