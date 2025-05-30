@@ -14,12 +14,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, UserListResponse } from "@/types/User";
 import { ColumnDef } from "@tanstack/react-table";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, set } from "date-fns";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import UserForm from "./UserForm";
 import { usePost } from "@/hooks/useApi";
 import { mutate } from "swr";
 import Link from "next/link";
+import { useState } from "react";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -153,7 +154,7 @@ export const columns: ColumnDef<User>[] = [
               Copy user ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
             <DropdownMenuItem>
               <Link href={`/users/${user._id}`}>View details</Link>
             </DropdownMenuItem>

@@ -1,11 +1,27 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useFetch } from "@/hooks/useApi";
+import { useFetch, usePost, usePut } from "@/hooks/useApi";
 import { format } from "date-fns";
-import { Calendar, Car, Clock, Mail, Phone, User, Wrench } from "lucide-react";
+import {
+  Calendar,
+  Car,
+  Clock,
+  Mail,
+  Phone,
+  User,
+  Wrench,
+  Pencil,
+} from "lucide-react";
 import { useParams } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useSWRConfig } from "swr";
+import UpdateUserForm from "./components/UpdateUserForm";
+import { Skeleton } from "@/components/ui/skeleton";
+import LoadingSkeleton from "./components/LoadingSkeleton";
 
 interface Vehicle {
   _id: string;
@@ -58,6 +74,8 @@ interface User {
   phone: string;
   role: string;
   createdAt: string;
+  updatedAt: string;
+  id: string;
   bookings: Booking[];
   assigns: Assignment[];
 }
@@ -69,7 +87,12 @@ interface UserResponse {
 
 export default function UserDetailsPage({}) {
   const params = useParams();
-  // const [user, setUser] = useState<User | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { mutate } = useSWRConfig();
+  const { postData } = usePost<User, UserResponse>(
+    `/api/v1/users/${params.id}`,
+    `/api/v1/users/${params.id}`
+  );
 
   const {
     data: user,
@@ -78,12 +101,25 @@ export default function UserDetailsPage({}) {
   } = useFetch<UserResponse>(`/api/v1/users/${params.id}`);
   console.log("user", user);
 
+  const { putData } = usePut<User, UserResponse>(
+    `/api/v1/users/${params.id}`,
+    `/api/v1/users/${params.id}`
+  );
+
+  const handleEditSubmit = async (values: User) => {
+    try {
+      await putData(values);
+      toast.success("User updated successfully");
+      // mutate(`/api/v1/users/${params.id}`); // Refresh the user data
+      setIsEditModalOpen(false);
+    } catch (error) {
+      toast.error("Failed to update user");
+      console.error(error);
+    }
+  };
+
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (!user) {
@@ -98,8 +134,16 @@ export default function UserDetailsPage({}) {
     <div className="container mx-auto p-6 space-y-6">
       {/* User Profile Card */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsEditModalOpen(true)}
+          >
+            <Pencil className="h-4 w-4 mr-2" />
+            Edit Profile
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -138,6 +182,19 @@ export default function UserDetailsPage({}) {
           </div>
         </CardContent>
       </Card>
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <UpdateUserForm
+              onSubmit={handleEditSubmit}
+              onClose={() => setIsEditModalOpen(false)}
+              initialData={user.user}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Content based on user role */}
       {user.user.role === "customer" ? (
