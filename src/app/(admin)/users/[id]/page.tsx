@@ -88,18 +88,12 @@ interface UserResponse {
 export default function UserDetailsPage({}) {
   const params = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { mutate } = useSWRConfig();
-  const { postData } = usePost<User, UserResponse>(
-    `/api/v1/users/${params.id}`,
-    `/api/v1/users/${params.id}`
-  );
 
   const {
     data: user,
     error,
     isLoading,
   } = useFetch<UserResponse>(`/api/v1/users/${params.id}`);
-  console.log("user", user);
 
   const { putData } = usePut<User, UserResponse>(
     `/api/v1/users/${params.id}`,

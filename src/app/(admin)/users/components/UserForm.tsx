@@ -3,6 +3,8 @@
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -22,20 +24,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react"; // Import icons for show/hide password
 
-function UserForm({
-  onSubmit,
-  onClose,
-}: {
-  onSubmit: (values: any) => void;
+const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  role: z.enum(["customer", "mechanic", "admin"]),
+  phone: z.string().min(8, "Phone number must be at least 8 digits"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+interface UserFormProps {
+  onSubmit: (values: FormValues) => void;
   onClose: () => void;
-}) {
+}
+
+function UserForm({ onSubmit, onClose }: UserFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
-  const form = useForm({
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
-      role: "customer", // Default role can be set to 'customer' or any other role
+      role: "customer",
       phone: "",
       password: "",
     },
@@ -43,7 +55,7 @@ function UserForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="name"
@@ -137,12 +149,9 @@ function UserForm({
             </FormItem>
           )}
         />
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button type="submit">Create</Button>
-        </div>
+        <Button type="submit" className="w-full">
+          Create User
+        </Button>
       </form>
     </Form>
   );

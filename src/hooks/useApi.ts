@@ -1,8 +1,8 @@
 import useSWR, { mutate } from "swr";
 import axios from "axios";
 
-const API_BASE_URL = "https://online-garage-backend.onrender.com";
-// const API_BASE_URL = "http://localhost:8800";
+// const API_BASE_URL = "https://online-garage-backend.onrender.com";
+const API_BASE_URL = "http://localhost:8800";
 
 // Helper function to get token from localStorage
 const getToken = () => {
@@ -33,7 +33,7 @@ export const useFetch = <T>(endpoint: string, params?: Record<string, any>) => {
   const { data, error, isValidating } = useSWR<T>(
     `${API_BASE_URL}${endpoint}${queryString}`,
     fetcher,
-    { revalidateOnFocus: true, shouldRetryOnError: true }
+    { revalidateOnFocus: false, shouldRetryOnError: true }
   );
   return { data, error, isLoading: isValidating };
 };
@@ -49,7 +49,7 @@ export const usePost = <TRequest, TResponse>(
     console.error("Error in usePost hook:", error);
     throw error; // Re-throw the error for further handling if needed
   }
-  const postData = async (data: TRequest): Promise<TResponse> => {
+  const postData = async (data: TRequest): Promise<TResponse | undefined> => {
     const response = await axios.post(
       `${API_BASE_URL}${postEndpoint}`,
       data,
@@ -88,14 +88,18 @@ export const useDelete = <TResponse>(
   deleteEndpoint: string,
   getEndpointToRevalidate?: string
 ) => {
-  const deleteData = async (): Promise<TResponse> => {
-    const response = await axios.delete(
-      `${API_BASE_URL}${deleteEndpoint}`,
-      getAxiosConfig()
-    );
+  const deleteData = async (
+    id: string,
+    endpointBase: string
+  ): Promise<TResponse> => {
+    const url = `${API_BASE_URL}${endpointBase}/${id}`;
+
+    const response = await axios.delete(url, getAxiosConfig());
+
     if (getEndpointToRevalidate) {
       mutate(`${API_BASE_URL}${getEndpointToRevalidate}`);
     }
+
     return response.data;
   };
 

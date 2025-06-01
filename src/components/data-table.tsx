@@ -15,6 +15,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
+  ArrowRightIcon,
   ChevronDown,
   DownloadIcon,
   MoreHorizontal,
@@ -54,6 +55,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import toast from "react-hot-toast";
 
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -111,8 +113,10 @@ export function DataTable<TData>({
     try {
       setIsSubmitting(true);
       await onAddSubmit(values);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      console.error("Error submitting form:", error.response);
+
+      toast.error(error.response.data.message || "Failed");
     } finally {
       setIsSubmitting(false);
     }
@@ -210,7 +214,7 @@ export function DataTable<TData>({
                     Export Selected ({selectedRows.length})
                   </Button>
                 )}
-                {onDeleteSelected && (
+                {/* {onDeleteSelected && (
                   <Button
                     variant="destructive"
                     size="sm"
@@ -219,7 +223,7 @@ export function DataTable<TData>({
                     <TrashIcon className="mr-2 h-4 w-4" />
                     Delete Selected ({selectedRows.length})
                   </Button>
-                )}
+                )} */}
               </>
             )}
           </div>
@@ -228,8 +232,16 @@ export function DataTable<TData>({
         <div className="flex items-center space-x-2">
           {AddFormComponent && (
             <div className="space-x-2">
-              <Button size="lg" onClick={() => setIsAddFormOpen(true)}>
+              {/* <Button size="lg" onClick={() => setIsAddFormOpen(true)}>
                 New
+              </Button> */}
+              <Button
+                effect="expandIcon"
+                icon={ArrowRightIcon}
+                iconPlacement="right"
+                onClick={() => setIsAddFormOpen(true)}
+              >
+                Add new
               </Button>
             </div>
           )}

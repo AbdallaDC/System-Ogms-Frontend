@@ -20,150 +20,8 @@ import { format } from "date-fns";
 import { Assign, AssignListResponse } from "@/types/Assign";
 import AssignForm from "./AssignForm";
 import toast from "react-hot-toast";
-import { usePost } from "@/hooks/useApi";
-
-export const columns: ColumnDef<Assign>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: "userName",
-    header: "Assigned User",
-    accessorFn: (row) => row.user_id.name || "N/A", // Handle potential undefined values
-    cell: ({ row }) => {
-      const userName = row.getValue("userName") as string | undefined;
-
-      return <div className="">{userName ? userName : "N/A"}</div>;
-    },
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const status = row.getValue("status") as string;
-      // Define color classes for different statuses
-      let bgColor = "bg-gray-200";
-      let textColor = "text-gray-800";
-      switch (status?.toLowerCase()) {
-        case "pending":
-          bgColor = "bg-yellow-100";
-          textColor = "text-yellow-800";
-          break;
-        case "confirmed":
-          bgColor = "bg-blue-100";
-          textColor = "text-blue-800";
-          break;
-        case "completed":
-          bgColor = "bg-green-100";
-          textColor = "text-green-800";
-          break;
-        case "cancelled":
-        case "canceled":
-          bgColor = "bg-red-100";
-          textColor = "text-red-800";
-          break;
-        default:
-          bgColor = "bg-gray-200";
-          textColor = "text-gray-800";
-      }
-      return (
-        <div
-          className={`inline-block px-3 py-1 rounded-full font-medium text-xs ${bgColor} ${textColor}`}
-        >
-          {status}
-        </div>
-      );
-    },
-  },
-  {
-    id: "bookingDate",
-    header: "Booking Date",
-    accessorFn: (row) => row.booking_id?.booking_date || "N/A", // Handle potential undefined values
-    cell: ({ row }) => {
-      const bookingDate = row.getValue("bookingDate") as string | undefined;
-      console.log("Owner Name:", bookingDate);
-
-      return (
-        <div className="">
-          {bookingDate
-            ? format(new Date(bookingDate), "MMM dd, yyyy, h:mm a")
-            : ""}
-        </div>
-      );
-    },
-  },
-
-  {
-    id: "serviceName",
-    header: "Service",
-    accessorFn: (row) => row.booking_id?.service_id.service_name || "N/A", // Handle potential undefined values
-    cell: ({ row }) => {
-      const serviceName = row.getValue("serviceName") as string | undefined;
-      console.log("Owner Name:", serviceName);
-
-      return <div className="">{serviceName ? serviceName : "N/A"}</div>;
-    },
-  },
-
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const service = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(service._id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import { useDelete, usePost } from "@/hooks/useApi";
+import Link from "next/link";
 
 interface AssignTableProps {
   data: Assign[];
@@ -174,6 +32,166 @@ export default function AssignTable({ data }: AssignTableProps) {
     "/api/v1/assigns",
     "/api/v1/assigns"
   );
+
+  const { deleteData } = useDelete(`/api/v1/assigns/`, "/api/v1/assigns");
+
+  const columns: ColumnDef<Assign>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      id: "userName",
+      header: "Assigned User",
+      accessorFn: (row) => row.user_id.name || "N/A", // Handle potential undefined values
+      cell: ({ row }) => {
+        const userName = row.getValue("userName") as string | undefined;
+
+        return <div className="">{userName ? userName : "N/A"}</div>;
+      },
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const status = row.getValue("status") as string;
+        // Define color classes for different statuses
+        let bgColor = "bg-gray-200";
+        let textColor = "text-gray-800";
+        switch (status?.toLowerCase()) {
+          case "pending":
+            bgColor = "bg-yellow-100";
+            textColor = "text-yellow-800";
+            break;
+          case "confirmed":
+            bgColor = "bg-blue-100";
+            textColor = "text-blue-800";
+            break;
+          case "completed":
+            bgColor = "bg-green-100";
+            textColor = "text-green-800";
+            break;
+          case "cancelled":
+          case "canceled":
+            bgColor = "bg-red-100";
+            textColor = "text-red-800";
+            break;
+          default:
+            bgColor = "bg-gray-200";
+            textColor = "text-gray-800";
+        }
+        return (
+          <div
+            className={`inline-block px-3 py-1 rounded-full font-medium text-xs ${bgColor} ${textColor}`}
+          >
+            {status}
+          </div>
+        );
+      },
+    },
+    {
+      id: "bookingDate",
+      header: "Booking Date",
+      accessorFn: (row) => row.booking_id?.booking_date || "N/A", // Handle potential undefined values
+      cell: ({ row }) => {
+        const bookingDate = row.getValue("bookingDate") as string | undefined;
+        console.log("Owner Name:", bookingDate);
+
+        return (
+          <div className="">
+            {bookingDate
+              ? format(new Date(bookingDate), "MMM dd, yyyy, h:mm a")
+              : ""}
+          </div>
+        );
+      },
+    },
+
+    {
+      id: "serviceName",
+      header: "Service",
+      accessorFn: (row) => row.booking_id?.service_id?.service_name || "N/A", // Handle potential undefined values
+      cell: ({ row }) => {
+        const serviceName = row.getValue("serviceName") as string | undefined;
+        console.log("Owner Name:", serviceName);
+
+        return <div className="">{serviceName ? serviceName : "N/A"}</div>;
+      },
+    },
+
+    {
+      id: "actions",
+      header: "Action",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const assign = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link href={`/assignments/${assign._id}`}>
+                  View Assignment details
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-500 text-center cursor-pointer"
+                onClick={async () => {
+                  try {
+                    await deleteData(assign._id, "/api/v1/assigns"); // Pass ID and endpoint base
+                    toast.success("Assign deleted successfully");
+                  } catch (error) {
+                    console.error("Error deleting assign:", error);
+                    toast.error("Error deleting assign");
+                  }
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
   const handleExportSelected = (selectedAssigns: Assign[]) => {
     console.log("Export selected:", selectedAssigns);
     // Implement your export logic here
