@@ -17,6 +17,8 @@ import { usePost } from "@/hooks/useApi";
 import { LoginResponse } from "@/types/loginResponse";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/utils/getUser";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 type LoginType = {
   email: string;
@@ -56,7 +58,7 @@ const LoginPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res: LoginResponse = await login(formData);
+      const res = await login(formData);
       localStorage.setItem("token", res.token);
       localStorage.setItem("user", JSON.stringify(res.user));
       console.log(res.user.role);
@@ -65,7 +67,11 @@ const LoginPage = () => {
       } else {
         router.push("/customer-dashboard");
       }
-    } catch (error) {
+      toast.success("Login successful");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+      console.log("error", error.response.data.message);
+
       console.log(error);
     } finally {
       setLoading(false);

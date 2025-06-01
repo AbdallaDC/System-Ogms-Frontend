@@ -42,10 +42,10 @@ export default function RootLayout({
               className: "",
               duration: 5000,
               removeDelay: 1000,
-              style: {
-                background: "#363636",
-                color: "#fff",
-              },
+              // style: {
+              //   background: "#363636",
+              //   color: "#fff",
+              // },
 
               // Default options for specific types
               success: {
@@ -53,6 +53,13 @@ export default function RootLayout({
                 iconTheme: {
                   primary: "green",
                   secondary: "black",
+                },
+              },
+              error: {
+                duration: 4000,
+                iconTheme: {
+                  primary: "red",
+                  secondary: "white",
                 },
               },
             }}
