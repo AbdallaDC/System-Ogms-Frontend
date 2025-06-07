@@ -608,7 +608,7 @@ const ServiceDetailsPage = () => {
                                   />
                                   <AvatarFallback className="text-xs">
                                     {item.mechanic.email
-                                      .charAt(0)
+                                      ?.charAt(0)
                                       .toUpperCase()}
                                   </AvatarFallback>
                                 </Avatar>

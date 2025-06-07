@@ -708,7 +708,7 @@ const VehicleDetailPage = () => {
                               src={`https://api.dicebear.com/7.x/initials/svg?seed=${item.mechanic?.email}`}
                             />
                             <AvatarFallback className="bg-blue-500 text-white">
-                              {item.mechanic?.email.charAt(0).toUpperCase()}
+                              {item.mechanic?.email?.charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
@@ -880,7 +880,7 @@ const ServiceHistoryItem = ({
                   src={`https://api.dicebear.com/7.x/initials/svg?seed=${item.mechanic.email}`}
                 />
                 <AvatarFallback className="text-xs bg-purple-500 text-white">
-                  {item.mechanic.email.charAt(0).toUpperCase()}
+                  {item.mechanic.email?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <p className="font-medium text-gray-900 text-sm">

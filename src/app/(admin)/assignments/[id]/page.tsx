@@ -305,7 +305,7 @@ const AssignDetailPage = () => {
                       alt={assign.user_id.name}
                     />
                     <AvatarFallback className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-2xl">
-                      {assign.user_id.name.charAt(0)}
+                      {assign.user_id.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>

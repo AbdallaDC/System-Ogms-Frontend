@@ -69,7 +69,7 @@ export function RecentBookingsTable({ bookings }: RecentBookingsTableProps) {
                       alt={booking.user_id.name}
                     />
                     <AvatarFallback>
-                      {booking.user_id.name.charAt(0)}
+                      {booking.user_id.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>

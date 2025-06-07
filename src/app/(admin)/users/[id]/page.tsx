@@ -717,7 +717,7 @@ export default function UserDetailsPage() {
                   alt={user.name}
                 />
                 <AvatarFallback className="bg-white/20 text-white text-3xl font-bold">
-                  {user.name.charAt(0)}
+                  {user.name?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div>
@@ -1160,7 +1160,7 @@ const CustomerHistoryItem = ({
                 src={`https://api.dicebear.com/7.x/initials/svg?seed=${item.mechanic.name}`}
               />
               <AvatarFallback className="text-xs bg-purple-500 text-white">
-                {item.mechanic.name.charAt(0).toUpperCase()}
+                {item.mechanic.name?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
