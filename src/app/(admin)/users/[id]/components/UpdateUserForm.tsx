@@ -30,7 +30,7 @@ export default function UpdateUserForm({
   onSubmit,
   onClose,
   initialData,
-}: UpdateUserFormProps) {
+}: any) {
   const form = useForm({
     defaultValues: {
       name: initialData.name,

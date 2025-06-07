@@ -83,11 +83,7 @@ interface UpdateAssignFormProps {
   initialData: Assign;
 }
 
-function UpdateAssignForm({
-  onSubmit,
-  onClose,
-  initialData,
-}: UpdateAssignFormProps) {
+function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
