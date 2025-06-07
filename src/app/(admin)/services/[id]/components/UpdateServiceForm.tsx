@@ -41,11 +41,7 @@ interface UpdateServiceFormProps {
   initialData: Service;
 }
 
-function UpdateServiceForm({
-  onSubmit,
-  onClose,
-  initialData,
-}: UpdateServiceFormProps) {
+function UpdateServiceForm({ onSubmit, onClose, initialData }: any) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {

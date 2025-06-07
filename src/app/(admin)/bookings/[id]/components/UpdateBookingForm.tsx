@@ -55,11 +55,7 @@ interface UpdateBookingFormProps {
   initialData: Booking;
 }
 
-function UpdateBookingForm({
-  onSubmit,
-  onClose,
-  initialData,
-}: UpdateBookingFormProps) {
+function UpdateBookingForm({ onSubmit, onClose, initialData }: any) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
