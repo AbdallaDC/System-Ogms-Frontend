@@ -42,7 +42,7 @@ import { format } from "date-fns";
 const formSchema = z.object({
   user_id: z.string().min(1, "Please select a mechanic"),
   booking_id: z.string().min(1, "Please select a booking"),
-  status: z.enum(["pending", "in_progress", "completed", "cancelled"]),
+  status: z.enum(["pending", "in-progress", "completed", "cancelled"]),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -290,7 +290,7 @@ function UpdateAssignForm({
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
+                  <SelectItem value="in-progress">In Progress</SelectItem>
                   <SelectItem value="completed">Completed</SelectItem>
                   <SelectItem value="cancelled">Cancelled</SelectItem>
                 </SelectContent>

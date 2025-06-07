@@ -162,9 +162,9 @@ export function ServicesTable({ data }: ServicesTableProps) {
       filterColumnId="service_name"
       filterPlaceholder="Filter services..."
       showActionButtons
-      onExportSelected={handleExportSelected}
+      //onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
-      onExportAll={handleExportAll}
+      //onExportAll={handleExportAll}
       onAddSubmit={handleAddSubmit}
       addFormComponent={ServiceForm}
     />

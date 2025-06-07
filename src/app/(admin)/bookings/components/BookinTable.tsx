@@ -58,6 +58,13 @@ export default function BookingTable({ data }: BookingTableProps) {
       enableHiding: false,
     },
     {
+      accessorKey: "booking_id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("booking_id")}</div>
+      ),
+    },
+    {
       id: "userName",
       header: "User",
       accessorFn: (row) => row.user_id?.name || "N/A", // Handle potential undefined values
@@ -219,9 +226,9 @@ export default function BookingTable({ data }: BookingTableProps) {
       filterColumnId="userName"
       filterPlaceholder="filter by user"
       showActionButtons
-      onExportSelected={handleExportSelected}
+      //onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
-      onExportAll={handleExportAll}
+      //onExportAll={handleExportAll}
       addFormComponent={BookingForm}
       onAddSubmit={handleAddSubmit}
     />

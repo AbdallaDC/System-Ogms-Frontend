@@ -4,6 +4,7 @@ export interface BookingUser {
   email: string;
   phone: string;
   id: string;
+  role: string;
 }
 
 export interface BookingVehicle {
@@ -16,6 +17,7 @@ export interface BookingVehicle {
 export interface BookingService {
   _id: string;
   service_name: string;
+  description: string;
 }
 
 export interface Booking {
@@ -23,11 +25,13 @@ export interface Booking {
   user_id: BookingUser;
   vehicle_id: BookingVehicle;
   service_id: BookingService;
+
   booking_date: string; // ISO date string
   status: string;
   createdBy: string;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
+  booking_id: string;
 }
 
 export interface BookingListResponse {

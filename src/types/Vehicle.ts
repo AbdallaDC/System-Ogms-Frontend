@@ -8,6 +8,7 @@ export interface VehicleOwner {
 
 export interface Vehicle {
   _id: string;
+  vehicle_id: string;
   owner: VehicleOwner;
   make: string;
   model: string;

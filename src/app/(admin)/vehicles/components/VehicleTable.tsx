@@ -53,11 +53,18 @@ export default function VehicleTable({ data }: VehicleTableProps) {
       enableSorting: false,
       enableHiding: false,
     },
+    // {
+    //   accessorKey: "make",
+    //   header: "Make",
+    //   cell: ({ row }) => (
+    //     <div className="capitalize">{row.getValue("make")}</div>
+    //   ),
+    // },
     {
-      accessorKey: "make",
-      header: "Make",
+      accessorKey: "vehicle_id",
+      header: "ID",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("make")}</div>
+        <div className="capitalize">{row.getValue("vehicle_id")}</div>
       ),
     },
     {
@@ -166,12 +173,12 @@ export default function VehicleTable({ data }: VehicleTableProps) {
     <DataTable
       columns={columns}
       data={data}
-      filterColumnId="make"
+      filterColumnId="model"
       filterPlaceholder="Search Vehicles"
       showActionButtons
-      onExportSelected={handleExportSelected}
+      //onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
-      onExportAll={handleExportAll}
+      // //onExportAll={handleExportAll}
       onAddSubmit={handleAddSubmit}
       addFormComponent={VehicleForm}
     />

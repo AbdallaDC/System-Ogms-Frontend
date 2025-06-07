@@ -242,9 +242,9 @@ export default function UserTable({ data }: UserTableProps) {
       filterColumnId="email"
       filterPlaceholder="Search by Email"
       showActionButtons
-      onExportSelected={handleExportSelected}
+      //onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
-      onExportAll={handleExportAll}
+      //onExportAll={handleExportAll}
       addFormComponent={UserForm}
       onAddSubmit={handleAddSubmit}
     />

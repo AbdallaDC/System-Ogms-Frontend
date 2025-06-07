@@ -156,10 +156,7 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                         className="w-full justify-between"
                       >
                         {selectedBooking
-                          ? format(
-                              new Date(selectedBooking.booking_date),
-                              "MMM-dd-yyyy"
-                            )
+                          ? selectedBooking.booking_id
                           : "Select a booking date"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                       </Button>
@@ -173,10 +170,11 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                         {bookingData?.bookings.map((booking) => (
                           <CommandItem
                             key={booking._id}
-                            value={format(
-                              new Date(booking.booking_date),
-                              "dd-MM-yyyy"
-                            )}
+                            // value={format(
+                            //   new Date(booking.booking_date),
+                            //   "dd-MM-yyyy"
+                            // )}
+                            value={booking.booking_id}
                             onSelect={() => {
                               field.onChange(booking._id);
                               setOpen(false);
@@ -190,10 +188,7 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                                   : "opacity-0"
                               )}
                             />
-                            {format(
-                              new Date(booking.booking_date),
-                              "dd-MMM-yyyy"
-                            )}
+                            {booking.booking_id}
                           </CommandItem>
                         ))}
                       </CommandGroup>

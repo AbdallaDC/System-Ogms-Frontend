@@ -28,6 +28,7 @@ export interface AssignBooking {
 
 export interface Assign {
   _id: string;
+  assign_id: string;
   user_id: AssignUser;
   booking_id: AssignBooking;
   status: string;

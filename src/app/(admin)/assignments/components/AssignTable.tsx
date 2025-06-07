@@ -227,9 +227,9 @@ export default function AssignTable({ data }: AssignTableProps) {
       filterColumnId="userName"
       filterPlaceholder="filter user"
       showActionButtons
-      onExportSelected={handleExportSelected}
+      //onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}
-      onExportAll={handleExportAll}
+      //onExportAll={handleExportAll}
       addFormComponent={AssignForm}
       onAddSubmit={handleAddSubmit}
     />

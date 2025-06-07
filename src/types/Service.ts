@@ -1,5 +1,6 @@
 export interface Service {
   _id: string;
+  service_id: string;
   service_name: string;
   description: string;
   price: number;
@@ -13,4 +14,17 @@ export interface ServiceListResponse {
   result: number;
   count: number;
   services: Service[];
+}
+
+export interface ServiceReport {
+  service_name: string;
+  totalBookings: number;
+  completedBookings: number;
+  totalRevenue: number;
+}
+
+export interface ServiceReportResponse {
+  status: string; // e.g., "success"
+  result: number;
+  report: ServiceReport[];
 }
