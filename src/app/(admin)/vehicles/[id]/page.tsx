@@ -653,7 +653,7 @@ const VehicleDetailPage = () => {
                       <Progress
                         value={(count / vehicleHistory.result) * 100}
                         className="h-2"
-                        indicatorClassName={getStatusColor(status)}
+                        //indicatorClassName={getStatusColor(status)}
                       />
                     </div>
                   ))}

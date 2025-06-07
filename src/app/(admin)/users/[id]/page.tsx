@@ -943,7 +943,7 @@ export default function UserDetailsPage() {
                         : 0
                     }
                     className="h-3"
-                    indicatorClassName="bg-emerald-500"
+                    // indicatorClassName="bg-emerald-500"
                   />
                 </div>
 

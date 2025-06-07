@@ -85,7 +85,7 @@ export function ServiceReportCard({ service }: ServiceReportProps) {
           <Progress
             value={completionRate}
             className="h-3 bg-blue-100 dark:bg-blue-900/50"
-            indicatorClassName="bg-gradient-to-r from-blue-500 to-cyan-500"
+            // indicatorClassName="bg-gradient-to-r from-blue-500 to-cyan-500"
           />
         </div>
       </CardContent>

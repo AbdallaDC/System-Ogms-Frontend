@@ -696,7 +696,7 @@ const AssignDetailPage = () => {
                   <Progress
                     value={100}
                     className="h-2"
-                    indicatorClassName="bg-emerald-500"
+                    // indicatorClassName="bg-emerald-500"
                   />
                 </div>
 
@@ -708,7 +708,7 @@ const AssignDetailPage = () => {
                   <Progress
                     value={100}
                     className="h-2"
-                    indicatorClassName="bg-emerald-500"
+                    // indicatorClassName="bg-emerald-500"
                   />
                 </div>
 
@@ -737,7 +737,7 @@ const AssignDetailPage = () => {
                         : 0
                     }
                     className="h-2"
-                    indicatorClassName="bg-blue-500"
+                    // indicatorClassName="bg-blue-500"
                   />
                 </div>
 
@@ -757,7 +757,7 @@ const AssignDetailPage = () => {
                   <Progress
                     value={assign.status === "completed" ? 100 : 0}
                     className="h-2"
-                    indicatorClassName="bg-emerald-500"
+                    // indicatorClassName="bg-emerald-500"
                   />
                 </div>
               </CardContent>

@@ -847,7 +847,7 @@ export default function AdminDashboard() {
                   <Progress
                     value={(bookingStatusCounts.pending / totalBookings) * 100}
                     className="h-3 bg-amber-100 "
-                    indicatorClassName="bg-gradient-to-r from-amber-500 to-amber-600"
+                    // indicatorClassName="bg-gradient-to-r from-amber-500 to-amber-600"
                   />
                 </div>
 
@@ -866,7 +866,7 @@ export default function AdminDashboard() {
                       (bookingStatusCounts.completed / totalBookings) * 100
                     }
                     className="h-3 bg-emerald-100 "
-                    indicatorClassName="bg-gradient-to-r from-emerald-500 to-emerald-600"
+                    // indicatorClassName="bg-gradient-to-r from-emerald-500 to-emerald-600"
                   />
                 </div>
 
@@ -885,7 +885,7 @@ export default function AdminDashboard() {
                       (bookingStatusCounts.cancelled / totalBookings) * 100
                     }
                     className="h-3 bg-red-100 "
-                    indicatorClassName="bg-gradient-to-r from-red-500 to-red-600"
+                    // indicatorClassName="bg-gradient-to-r from-red-500 to-red-600"
                   />
                 </div>
 
