@@ -37,7 +37,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-1 flex-col">
           {/* Global header with SidebarTrigger */}
           <header className="flex h-14 items-center gap-4 border-b px-4 lg:h-[60px]">
-            <SidebarTrigger />
+            {/* <SidebarTrigger /> */}
             {/* <div className="w-full flex-1">
               <form className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted" />

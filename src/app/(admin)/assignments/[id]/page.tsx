@@ -209,13 +209,15 @@ const AssignDetailPage = () => {
 
   const { assign } = assignData;
 
+  console.log("assign: ", assign.createdBy);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50  p-6">
       <div className="container mx-auto space-y-8">
         {/* Hero Header */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 p-8 text-white shadow-2xl">
           {/* Background Pattern */}
-          <div className='absolute inset-0 bg-[url(&apos;data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fillRule="evenodd"%3E%3Cg fill="%23ffffff" fillOpacity="0.1"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&apos;)] opacity-20'></div>
+          <div className='absolute inset-0 bg-[url(&apos;data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg fill="none" fillRule="evenodd"%3E%3Cg fill="%23ffffff" fillOpacity="0.1"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&apos;)] opacity-20'></div>
 
           {/* Floating Elements */}
           <div className="absolute top-4 right-4 animate-bounce">
@@ -301,20 +303,20 @@ const AssignDetailPage = () => {
                 <div className="flex items-center gap-6 mb-6">
                   <Avatar className="h-20 w-20">
                     <AvatarImage
-                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${assign.user_id.name}`}
-                      alt={assign.user_id.name}
+                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${assign?.user_id.name}`}
+                      alt={assign?.user_id.name}
                     />
                     <AvatarFallback className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-2xl">
-                      {assign.user_id.name?.charAt(0)}
+                      {assign?.user_id.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900">
-                      {assign.user_id.name}
+                      {assign?.user_id.name}
                     </h3>
                     <p className="text-gray-600 text-lg">Mechanic</p>
                     <p className="text-sm text-gray-500">
-                      {assign.user_id.user_id || assign.user_id.id}
+                      {assign?.user_id.user_id || assign?.user_id.id}
                     </p>
                   </div>
                 </div>
@@ -329,7 +331,7 @@ const AssignDetailPage = () => {
                         Email Address
                       </p>
                       <p className="text-lg font-bold text-gray-900">
-                        {assign.user_id.email}
+                        {assign?.user_id.email}
                       </p>
                     </div>
                   </div>
@@ -629,7 +631,7 @@ const AssignDetailPage = () => {
                     <span className="font-medium">Created By</span>
                   </div>
                   <span className="text-sm text-gray-600">
-                    {assign.createdBy}
+                    {/* {assign.createdBy} */}
                   </span>
                 </div>
 
