@@ -1,178 +1,3 @@
-// "use client";
-
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { useFetch, usePut } from "@/hooks/useApi";
-// import { format } from "date-fns";
-// import { Clock, DollarSign, Mail, Pencil, Wrench } from "lucide-react";
-// import { useParams } from "next/navigation";
-// import { useState } from "react";
-// import { Skeleton } from "@/components/ui/skeleton";
-// import { toast } from "sonner";
-// import UpdateServiceForm from "./components/UpdateServiceForm";
-
-// interface Service {
-//   _id: string;
-//   service_name: string;
-//   description: string;
-//   price: number;
-//   createdBy: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
-// interface ServiceResponse {
-//   status: string;
-//   service: Service;
-// }
-
-// const LoadingSkeleton = () => {
-//   return (
-//     <div className="container mx-auto p-6 space-y-6">
-//       <Card>
-//         <CardHeader>
-//           <Skeleton className="h-8 w-48" />
-//         </CardHeader>
-//         <CardContent>
-//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//             <div className="space-y-4">
-//               <Skeleton className="h-6 w-full" />
-//               <Skeleton className="h-6 w-full" />
-//               <Skeleton className="h-6 w-full" />
-//             </div>
-//             <div className="space-y-4">
-//               <Skeleton className="h-6 w-full" />
-//               <Skeleton className="h-6 w-full" />
-//             </div>
-//           </div>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// };
-
-// const ServiceDetailsPage = () => {
-//   const params = useParams();
-//   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-//   const {
-//     data: serviceData,
-//     error,
-//     isLoading,
-//   } = useFetch<ServiceResponse>(`/api/v1/services/${params.id}`);
-
-//   const { data: serviceHistory, isLoading: isLoadingHistory } = useFetch<any>(
-//     `/api/v1/history/service/${params.id}`
-//   );
-
-//   const { putData } = usePut<Service, ServiceResponse>(
-//     `/api/v1/services/${params.id}`,
-//     `/api/v1/services/${params.id}`
-//   );
-
-//   const handleEditSubmit = async (values: Service) => {
-//     try {
-//       await putData(values);
-//       toast.success("Service updated successfully");
-//       setIsEditModalOpen(false);
-//     } catch (error) {
-//       toast.error("Failed to update service");
-//       console.error(error);
-//     }
-//   };
-
-//   if (isLoading) {
-//     return <LoadingSkeleton />;
-//   }
-
-//   if (error || !serviceData) {
-//     return (
-//       <div className="flex items-center justify-center min-h-screen">
-//         Service not found
-//       </div>
-//     );
-//   }
-
-//   const { service } = serviceData;
-
-//   return (
-//     <div className="container mx-auto p-6 space-y-6">
-//       {/* Service Details Card */}
-//       <Card>
-//         <CardHeader className="flex flex-row items-center justify-between">
-//           <CardTitle className="text-2xl font-bold">Service Details</CardTitle>
-//           <Button
-//             variant="outline"
-//             size="sm"
-//             onClick={() => setIsEditModalOpen(true)}
-//           >
-//             <Pencil className="h-4 w-4 mr-2" />
-//             Edit Service
-//           </Button>
-//         </CardHeader>
-//         <CardContent>
-//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//             <div className="space-y-4">
-//               <div className="flex items-center space-x-2">
-//                 <Wrench className="w-5 h-5 text-gray-500" />
-//                 <span className="text-gray-700 font-medium">
-//                   {service.service_name}
-//                 </span>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <DollarSign className="w-5 h-5 text-gray-500" />
-//                 <span className="text-gray-700">${service.price}</span>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <Mail className="w-5 h-5 text-gray-500" />
-//                 <span className="text-gray-700">{service.createdBy}</span>
-//               </div>
-//             </div>
-//             <div className="space-y-4">
-//               <div className="flex items-center space-x-2">
-//                 <Clock className="w-5 h-5 text-gray-500" />
-//                 <span className="text-gray-700">
-//                   Created on{" "}
-//                   {format(new Date(service.createdAt), "MMMM d, yyyy")}
-//                 </span>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <Clock className="w-5 h-5 text-gray-500" />
-//                 <span className="text-gray-700">
-//                   Last updated{" "}
-//                   {format(new Date(service.updatedAt), "MMMM d, yyyy")}
-//                 </span>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* Description Section */}
-//           <div className="mt-6 pt-6 border-t">
-//             <h3 className="text-lg font-semibold mb-2">Description</h3>
-//             <p className="text-gray-700">{service.description}</p>
-//           </div>
-//         </CardContent>
-//       </Card>
-
-//       {/* Edit Modal */}
-//       {isEditModalOpen && (
-//         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-//           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-//             <UpdateServiceForm
-//               onSubmit={handleEditSubmit}
-//               onClose={() => setIsEditModalOpen(false)}
-//               initialData={service}
-//             />
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ServiceDetailsPage;
-
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -197,6 +22,7 @@ import {
   TrendingUp,
   Activity,
   ArrowRight,
+  Star,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -247,6 +73,17 @@ interface ServiceHistoryResponse {
   history: ServiceHistoryItem[];
 }
 
+interface RatingSummary {
+  _id: string;
+  feedbackCount: number;
+  avgRating: number;
+}
+
+interface RatingSummaryResponse {
+  status: string;
+  summary: RatingSummary[];
+}
+
 const LoadingSkeleton = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50  p-6">
@@ -285,6 +122,10 @@ const ServiceDetailsPage = () => {
   const { data: serviceHistory, isLoading: isLoadingHistory } =
     useFetch<ServiceHistoryResponse>(`/api/v1/history/service/${params.id}`);
 
+  const { data: ratingData, isLoading: isLoadingRating } =
+    useFetch<RatingSummaryResponse>(
+      `/api/v1/feedback/summary/service/${params.id}`
+    );
   const { putData } = usePut<Service, ServiceResponse>(
     `/api/v1/services/${params.id}`,
     `/api/v1/services/${params.id}`
@@ -325,6 +166,53 @@ const ServiceDetailsPage = () => {
       default:
         return "default";
     }
+  };
+
+  const StarRating = ({
+    rating,
+    size = "sm",
+  }: {
+    rating: number;
+    size?: "sm" | "md" | "lg";
+  }) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - Math.ceil(rating);
+
+    const starSize =
+      size === "lg" ? "h-6 w-6" : size === "md" ? "h-5 w-5" : "h-4 w-4";
+
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <Star
+          key={`full-${i}`}
+          className={`${starSize} fill-yellow-400 text-yellow-400`}
+        />
+      );
+    }
+
+    // Half star
+    if (hasHalfStar) {
+      stars.push(
+        <div key="half" className="relative">
+          <Star className={`${starSize} text-gray-300`} />
+          <div className="absolute inset-0 overflow-hidden w-1/2">
+            <Star className={`${starSize} fill-yellow-400 text-yellow-400`} />
+          </div>
+        </div>
+      );
+    }
+
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(
+        <Star key={`empty-${i}`} className={`${starSize} text-gray-300`} />
+      );
+    }
+
+    return <div className="flex items-center gap-1">{stars}</div>;
   };
 
   if (isLoading) {
@@ -634,6 +522,56 @@ const ServiceDetailsPage = () => {
                 </p>
               </CardContent>
             </Card>
+            {/* Rating Summary */}
+            {ratingData && ratingData.summary.length > 0 && (
+              <Card className="overflow-hidden border-none bg-gradient-to-br from-yellow-500 to-orange-600 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-3 bg-white/20 rounded-xl">
+                      <Star className="h-8 w-8" />
+                    </div>
+                    <Sparkles className="h-6 w-6 animate-pulse" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">Service Rating</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <StarRating
+                        rating={ratingData.summary[0].avgRating}
+                        size="lg"
+                      />
+                      <span className="text-2xl font-bold">
+                        {ratingData.summary[0].avgRating.toFixed(1)}
+                      </span>
+                    </div>
+                    <p className="text-yellow-100 text-sm">
+                      Based on {ratingData.summary[0].feedbackCount} review
+                      {ratingData.summary[0].feedbackCount !== 1 ? "s" : ""}
+                    </p>
+                    <div className="bg-white/20 rounded-lg p-3 mt-4">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>Customer Satisfaction</span>
+                        <span>
+                          {Math.round(
+                            (ratingData.summary[0].avgRating / 5) * 100
+                          )}
+                          %
+                        </span>
+                      </div>
+                      <div className="w-full bg-white/20 rounded-full h-2">
+                        <div
+                          className="bg-white rounded-full h-2 transition-all duration-500"
+                          style={{
+                            width: `${
+                              (ratingData.summary[0].avgRating / 5) * 100
+                            }%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Service Status Overview */}
             {serviceHistory && serviceHistory.history.length > 0 && (

@@ -30,6 +30,7 @@ import {
   Activity,
   PenToolIcon as Tool,
   TrendingUp,
+  Star,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -43,6 +44,28 @@ interface BookingResponse {
   status: string;
   booking: Booking;
 }
+
+const StarRating = ({ rating }: { rating: number }) => {
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`h-5 w-5 ${
+            star <= Math.floor(rating)
+              ? "fill-yellow-400 text-yellow-400"
+              : star - 0.5 <= rating
+              ? "fill-yellow-400/50 text-yellow-400"
+              : "text-gray-300"
+          }`}
+        />
+      ))}
+      <span className="ml-2 text-lg font-semibold text-gray-700">
+        {rating.toFixed(1)}/5.0
+      </span>
+    </div>
+  );
+};
 
 const LoadingSkeleton = () => {
   return (
@@ -78,6 +101,21 @@ const BookingDetailPage = () => {
     error,
     isLoading,
   } = useFetch<BookingResponse>(`/api/v1/bookings/${params.id}`);
+
+  const { data: feedbackData } = useFetch<{
+    status: string;
+    feedback: {
+      _id: string;
+      booking_id: string;
+      customer_id: string;
+      mechanic_id: string;
+      rating: number;
+      comment: string;
+      createdAt: string;
+      updatedAt: string;
+      feedback_id: string;
+    };
+  }>(`/api/v1/feedback/booking/${params.id}`);
 
   const { putData } = usePut<Booking, BookingResponse>(
     `/api/v1/bookings/${params.id}`,
@@ -605,6 +643,50 @@ const BookingDetailPage = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Customer Feedback */}
+            {feedbackData?.feedback && (
+              <Card className="overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-2xl hover:shadow-3xl transition-all duration-300">
+                <CardHeader className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20">
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="h-5 w-5 text-yellow-500" />
+                    Customer Feedback
+                  </CardTitle>
+                  <CardDescription>
+                    Rating and review for this service
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-6 space-y-4">
+                  <div className="text-center">
+                    <StarRating rating={feedbackData.feedback.rating} />
+                    <p className="text-sm text-gray-500 mt-1">
+                      Feedback ID: {feedbackData.feedback.feedback_id}
+                    </p>
+                  </div>
+
+                  {feedbackData.feedback.comment && (
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <h4 className="font-medium text-gray-900 mb-2">
+                        Customer Comment
+                      </h4>
+                      <p className="text-gray-700 leading-relaxed italic">
+                        "{feedbackData.feedback.comment}"
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t">
+                    <span>Submitted on</span>
+                    <span>
+                      {format(
+                        new Date(feedbackData.feedback.createdAt),
+                        "MMM d, yyyy"
+                      )}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 

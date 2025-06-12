@@ -38,6 +38,7 @@ import Link from "next/link";
 import { BookingStatusChart } from "./components/booking-status-chart";
 import { ServiceReportCard } from "./components/service-report-card";
 import { TransactionChart } from "./components/transaction-chart";
+import { RatingSummaryCard } from "./components/rating-summary-card";
 
 export default function AdminDashboard() {
   const { data: servicesData, isLoading: isLoadingServices } =
@@ -274,6 +275,9 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Rating Summary */}
+        <RatingSummaryCard />
 
         {/* Service Reports Section */}
         {reportsData?.report && reportsData.report.length > 0 && (
