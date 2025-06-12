@@ -20,8 +20,16 @@ import { format } from "date-fns";
 import { Assign, AssignListResponse } from "@/types/Assign";
 import AssignForm from "./AssignForm";
 import toast from "react-hot-toast";
-import { useDelete, usePost } from "@/hooks/useApi";
+import { useDelete, usePost, usePut } from "@/hooks/useApi";
 import Link from "next/link";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import TransferForm from "./transfer-form";
 
 interface AssignTableProps {
   data: Assign[];
@@ -32,8 +40,35 @@ export default function AssignTable({ data }: AssignTableProps) {
     "/api/v1/assigns",
     "/api/v1/assigns"
   );
+  const { putData } = usePut<Assign, AssignListResponse>(
+    "/api/v1/assigns",
+    "/api/v1/assigns"
+  );
 
   const { deleteData } = useDelete(`/api/v1/assigns/`, "/api/v1/assigns");
+
+  const [transferDialogOpen, setTransferDialogOpen] = useState(false);
+  const [selectedAssignForTransfer, setSelectedAssignForTransfer] =
+    useState<Assign | null>(null);
+
+  const handleTransferSubmit = async (values: {
+    new_user_id: string;
+    reason: string;
+  }) => {
+    if (!selectedAssignForTransfer) return;
+
+    try {
+      // await putData(values)
+      toast.success("Assignment transferred successfully!");
+      setTransferDialogOpen(false);
+      setSelectedAssignForTransfer(null);
+    } catch (error: any) {
+      console.error("Error transferring assignment:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to transfer assignment"
+      );
+    }
+  };
 
   const columns: ColumnDef<Assign>[] = [
     {
@@ -172,6 +207,14 @@ export default function AssignTable({ data }: AssignTableProps) {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={() => {
+                  setSelectedAssignForTransfer(assign);
+                  setTransferDialogOpen(true);
+                }}
+              >
+                Transfer
+              </DropdownMenuItem>
+              <DropdownMenuItem
                 className="text-red-500 text-center cursor-pointer"
                 onClick={async () => {
                   try {
@@ -221,17 +264,39 @@ export default function AssignTable({ data }: AssignTableProps) {
     }
   };
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-      filterColumnId="userName"
-      filterPlaceholder="filter user"
-      showActionButtons
-      //onExportSelected={handleExportSelected}
-      onDeleteSelected={handleDeleteSelected}
-      //onExportAll={handleExportAll}
-      addFormComponent={AssignForm}
-      onAddSubmit={handleAddSubmit}
-    />
+    <>
+      <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Transfer Assignment</DialogTitle>
+          </DialogHeader>
+          {selectedAssignForTransfer && (
+            <TransferForm
+              assignId={selectedAssignForTransfer._id}
+              currentUserId={selectedAssignForTransfer.user_id._id}
+              currentUserName={selectedAssignForTransfer.user_id.name}
+              // onSubmit={handleTransferSubmit}
+              onClose={() => {
+                setTransferDialogOpen(false);
+                setSelectedAssignForTransfer(null);
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <DataTable
+        columns={columns}
+        data={data}
+        filterColumnId="userName"
+        filterPlaceholder="filter user"
+        showActionButtons
+        //onExportSelected={handleExportSelected}
+        onDeleteSelected={handleDeleteSelected}
+        //onExportAll={handleExportAll}
+        addFormComponent={AssignForm}
+        onAddSubmit={handleAddSubmit}
+      />
+    </>
   );
 }
