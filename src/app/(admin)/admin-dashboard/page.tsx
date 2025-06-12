@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,46 +9,39 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useFetch } from "@/hooks/useApi";
+import type { AssignListResponse } from "@/types/Assign";
+import type { BookingListResponse } from "@/types/Booking";
+import { InventoryListResponse } from "@/types/Inventory";
 import type {
   ServiceListResponse,
   ServiceReportResponse,
 } from "@/types/Service";
-import type { VehicleListResponse } from "@/types/Vehicle";
-import type { BookingListResponse } from "@/types/Booking";
-import type { AssignListResponse } from "@/types/Assign";
-import {
-  Wrench,
-  Car,
-  Calendar,
-  ArrowRight,
-  User,
-  TrendingUp,
-  ChevronRight,
-  DollarSign,
-  CheckCircle,
-  Clock,
-  BarChart3,
-  Package,
-  CreditCard,
-} from "lucide-react";
-import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ServiceReportCard } from "./components/service-report-card";
-import { BookingStatusChart } from "./components/booking-status-chart";
-import { InventoryListResponse } from "@/types/Inventory";
 import { TransactionResponse } from "@/types/Transaction";
+import type { VehicleListResponse } from "@/types/Vehicle";
+import { format } from "date-fns";
+import {
+  BarChart3,
+  Calendar,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  CreditCard,
+  Package,
+  TrendingUp,
+  User,
+  Wrench,
+} from "lucide-react";
+import Link from "next/link";
+import { BookingStatusChart } from "./components/booking-status-chart";
+import { ServiceReportCard } from "./components/service-report-card";
 import { TransactionChart } from "./components/transaction-chart";
 
 export default function AdminDashboard() {
   const { data: servicesData, isLoading: isLoadingServices } =
     useFetch<ServiceListResponse>("/api/v1/services");
-  const { data: vehiclesData, isLoading: isLoadingVehicles } =
-    useFetch<VehicleListResponse>("/api/v1/vehicles");
   const { data: bookingsData, isLoading: isLoadingBookings } =
     useFetch<BookingListResponse>("/api/v1/bookings");
   const { data: assignsData, isLoading: isLoadingAssigns } =
@@ -60,7 +55,6 @@ export default function AdminDashboard() {
 
   const isLoading =
     isLoadingServices ||
-    isLoadingVehicles ||
     isLoadingBookings ||
     isLoadingAssigns ||
     isLoadingReports ||

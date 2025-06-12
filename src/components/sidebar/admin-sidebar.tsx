@@ -46,7 +46,9 @@ export function AdminSidebar() {
 
   // Get user data
   const userData = getUser();
-  const { user_id, name, email, phone, role } = userData?.user;
+
+  // const { user_id, name, email, phone, role } = userData?.user;
+  // console.log("userData", userData.user);
 
   // Handle logout
   const handleLogout = () => {
@@ -201,17 +203,21 @@ export function AdminSidebar() {
         >
           <Avatar className="h-10 w-10 border-2 border-blue-200">
             <AvatarImage
-              src={`https://api.dicebear.com/7.x/initials/svg?seed=${name}`}
-              alt={name}
+              src={`https://api.dicebear.com/7.x/initials/svg?seed=${userData?.user?.name}`}
+              alt={userData?.user?.name}
             />
             <AvatarFallback className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
-              {name?.charAt(0)}
+              {userData?.user?.name?.charAt(0)}
             </AvatarFallback>
           </Avatar>
           {!collapsed && (
             <div className="flex flex-1 flex-col overflow-hidden">
-              <span className="truncate font-medium text-blue-900">{name}</span>
-              <span className="truncate text-xs text-blue-700">{email}</span>
+              <span className="truncate font-medium text-blue-900">
+                {userData?.user?.name}
+              </span>
+              <span className="truncate text-xs text-blue-700">
+                {userData?.user?.email}
+              </span>
             </div>
           )}
         </div>
