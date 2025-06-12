@@ -1,8 +1,9 @@
+// "use client";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
 
-const API_BASE_URL = "https://online-garage-backend.onrender.com";
-// const API_BASE_URL = "http://localhost:8800";
+export const API_BASE_URL = "https://online-garage-backend.onrender.com";
+// export const API_BASE_URL = "http://localhost:8800";
 
 // Helper function to get token from localStorage
 const getToken = () => {
@@ -30,12 +31,12 @@ export const useFetch = <T>(endpoint: string, params?: Record<string, any>) => {
   const queryString = params
     ? `?${new URLSearchParams(params).toString()}`
     : "";
-  const { data, error, isValidating } = useSWR<T>(
+  const { data, error, isValidating, mutate } = useSWR<T>(
     `${API_BASE_URL}${endpoint}${queryString}`,
     fetcher,
     { revalidateOnFocus: false, shouldRetryOnError: true }
   );
-  return { data, error, isLoading: isValidating };
+  return { data, error, isLoading: isValidating, mutate };
 };
 
 // Mutation hooks: POST, PUT, DELETE with automatic revalidation

@@ -295,52 +295,15 @@ const BookingDetailPage = () => {
               <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50 ">
                 <CardTitle className="flex items-center gap-2 text-2xl">
                   <Car className="h-6 w-6 text-emerald-500" />
-                  Vehicle & Service Details
+                  Service Details
                 </CardTitle>
                 <CardDescription>
-                  Information about the vehicle and requested service
+                  Information about the requested service
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className=" gap-8">
                   {/* Vehicle Information */}
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                      <Car className="h-5 w-5 text-blue-500" />
-                      Vehicle Details
-                    </h3>
-
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-4 p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors">
-                        <div className="p-3 bg-blue-500 rounded-lg">
-                          <Car className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500 font-medium">
-                            Vehicle Model
-                          </p>
-                          <p className="text-lg font-bold text-gray-900">
-                            {booking.vehicle_id?.make}{" "}
-                            {booking.vehicle_id?.model}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-4 p-4 bg-amber-50 rounded-xl hover:bg-amber-100 transition-colors">
-                        <div className="p-3 bg-amber-500 rounded-lg">
-                          <Calendar className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500 font-medium">
-                            Year
-                          </p>
-                          <p className="text-lg font-bold text-gray-900">
-                            {booking.vehicle_id?.year}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   {/* Service Information */}
                   <div className="space-y-6">

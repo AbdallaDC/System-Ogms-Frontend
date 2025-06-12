@@ -222,24 +222,22 @@ interface ServiceResponse {
 
 interface ServiceHistoryItem {
   booking_id: string;
-  vehicle: {
-    _id: string;
-    model: string;
-    year: number;
-    vehicle_id: string;
-  };
+
   service: {
     _id: string;
     service_name: string;
     description: string;
     price: number;
     createdBy: string;
+    service_id: string;
   };
   date: string;
   status: string;
   mechanic: {
     _id: string;
     email: string;
+    user_id: string;
+    phone: string;
   } | null;
 }
 
@@ -559,25 +557,7 @@ const ServiceDetailsPage = () => {
                           </Badge>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="bg-blue-50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Car className="h-4 w-4 text-blue-500" />
-                              <span className="text-sm font-medium text-blue-700">
-                                Vehicle
-                              </span>
-                            </div>
-                            <p className="font-bold text-gray-900">
-                              {item.vehicle.model}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Year: {item.vehicle.year}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {item.vehicle.vehicle_id}
-                            </p>
-                          </div>
-
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="bg-emerald-50 rounded-lg p-4">
                             <div className="flex items-center gap-2 mb-2">
                               <DollarSign className="h-4 w-4 text-emerald-500" />

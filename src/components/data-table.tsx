@@ -503,10 +503,10 @@ export function DataTable<TData>({
       setIsSubmitting(true);
       await onAddSubmit(values);
       setIsAddFormOpen(false);
-      toast.success("Record added successfully!");
+      // toast.success("Record added successfully!");
     } catch (error: any) {
       console.error("Error submitting form:", error.response);
-      toast.error(error.response?.data?.message || "Failed to add record");
+      // toast.error(error.response?.data?.message || "Failed to add record");
     } finally {
       setIsSubmitting(false);
     }

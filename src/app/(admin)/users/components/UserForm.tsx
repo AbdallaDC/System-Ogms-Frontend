@@ -29,6 +29,7 @@ const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   role: z.enum(["customer", "mechanic", "admin"]),
   phone: z.string().min(8, "Phone number must be at least 8 digits"),
+  address: z.string().min(2, "Address must be at least 2 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -47,8 +48,9 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
     defaultValues: {
       name: "",
       email: "",
-      role: "customer",
       phone: "",
+      address: "",
+      role: "customer",
       password: "",
     },
   });
@@ -84,9 +86,35 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
         />
         <FormField
           control={form.control}
-          name="role"
+          name="phone"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter phone number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem className="w-full">
               <FormLabel>Role</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
@@ -104,19 +132,7 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter phone number" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="password"

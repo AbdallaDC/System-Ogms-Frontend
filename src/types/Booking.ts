@@ -23,7 +23,7 @@ export interface BookingService {
 export interface Booking {
   _id: string;
   user_id: BookingUser;
-  vehicle_id: BookingVehicle;
+  // vehicle_id: BookingVehicle;
   service_id: BookingService;
 
   booking_date: string; // ISO date string

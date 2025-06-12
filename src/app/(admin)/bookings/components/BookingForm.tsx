@@ -37,11 +37,10 @@ import { useState } from "react";
 
 const formSchema = z.object({
   user_id: z.string().min(1, "Please select a customer"),
-  vehicle_id: z.string().min(1, "Please select a vehicle"),
   service_id: z.string().min(1, "Please select a service"),
-  booking_date: z.date({
-    required_error: "Please select a booking date",
-  }),
+  // booking_date: z.date({
+  //   required_error: "Please select a booking date",
+  // }),
   status: z.enum(["pending", "completed", "cancelled"]),
 });
 
@@ -57,9 +56,8 @@ function BookingForm({ onSubmit, onClose }: BookingFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       user_id: "",
-      vehicle_id: "",
       service_id: "",
-      booking_date: new Date(),
+      // booking_date: new Date(),
       status: "pending",
     },
   });
@@ -154,67 +152,6 @@ function BookingForm({ onSubmit, onClose }: BookingFormProps) {
 
         <FormField
           control={form.control}
-          name="vehicle_id"
-          render={({ field }) => {
-            const [open, setOpen] = useState(false);
-            const selectedVehicle = vehicleData?.vehicles.find(
-              (vehicle) => vehicle._id === field.value
-            );
-            return (
-              <FormItem>
-                <FormLabel>Vehicle</FormLabel>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className="w-full justify-between"
-                      >
-                        {selectedVehicle
-                          ? `${selectedVehicle.make} ${selectedVehicle.model} (${selectedVehicle.year})`
-                          : "Select a vehicle"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command>
-                      <CommandInput placeholder="Search vehicles..." />
-                      <CommandEmpty>No vehicle found.</CommandEmpty>
-                      <CommandGroup>
-                        {vehicleData?.vehicles.map((vehicle) => (
-                          <CommandItem
-                            key={vehicle._id}
-                            value={`${vehicle.make} ${vehicle.model}`}
-                            onSelect={() => {
-                              field.onChange(vehicle._id);
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                vehicle._id === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {`${vehicle.make} ${vehicle.model} (${vehicle.year})`}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-
-        <FormField
-          control={form.control}
           name="service_id"
           render={({ field }) => {
             const [open, setOpen] = useState(false);
@@ -272,7 +209,7 @@ function BookingForm({ onSubmit, onClose }: BookingFormProps) {
           }}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="booking_date"
           render={({ field }) => (
@@ -308,7 +245,7 @@ function BookingForm({ onSubmit, onClose }: BookingFormProps) {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button type="submit" className="w-full">
           Create Booking

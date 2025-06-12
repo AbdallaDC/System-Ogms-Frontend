@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -32,10 +32,22 @@ import { BookingListResponse } from "@/types/Booking";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
+import { InventoryListResponse } from "@/types/Inventory";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   user_id: z.string().min(1, "Please select a mechanic"),
   booking_id: z.string().min(1, "Please select a booking"),
+  usedInventory: z
+    .array(
+      z.object({
+        item: z.string().min(1, "Please select an inventory item"),
+        quantity: z.coerce
+          .number({ invalid_type_error: "Quantity must be a number" })
+          .min(1, "Quantity must be at least 1"),
+      })
+    )
+    .min(1, "Please add at least one inventory item"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -51,7 +63,12 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
     defaultValues: {
       user_id: "",
       booking_id: "",
+      usedInventory: [], // start with no items selected
     },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "usedInventory",
   });
 
   const {
@@ -59,6 +76,13 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
     error: userError,
     isLoading: isLoadingUsers,
   } = useFetch<UserListResponse>("/api/v1/users/role/mechanic");
+
+  const {
+    data: inventoryData,
+    error: inventoryError,
+    isLoading: isLoadingInventory,
+  } = useFetch<InventoryListResponse>("/api/v1/inventory");
+  console.log("inventoryData", inventoryData);
 
   const {
     data: bookingData,
@@ -157,15 +181,15 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                       >
                         {selectedBooking
                           ? selectedBooking.booking_id
-                          : "Select a booking date"}
+                          : "Select a booking"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
                     <Command>
-                      <CommandInput placeholder="Search booking date..." />
-                      <CommandEmpty>No booking date found.</CommandEmpty>
+                      <CommandInput placeholder="Search booking ID..." />
+                      <CommandEmpty>No booking found.</CommandEmpty>
                       <CommandGroup>
                         {bookingData?.bookings.map((booking) => (
                           <CommandItem
@@ -200,6 +224,114 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
             );
           }}
         />
+
+        {/* Inventory Items Selection */}
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="flex justify-center items-center gap-4"
+          >
+            {/* Inventory item dropdown */}
+            <FormField
+              control={form.control}
+              name={`usedInventory.${index}.item`}
+              render={({ field: itemField }) => {
+                const [open, setOpen] = useState(false);
+                const selectedInv = inventoryData?.items.find(
+                  (inv) => inv._id === itemField.value
+                );
+                return (
+                  <FormItem className="flex-1">
+                    <FormLabel>Item</FormLabel>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className="w-full justify-between"
+                          >
+                            {selectedInv ? selectedInv.name : "Select an item"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Search items..." />
+                          <CommandEmpty>No item found.</CommandEmpty>
+                          <CommandGroup>
+                            {inventoryData?.items.map((inv) => (
+                              <CommandItem
+                                key={inv._id}
+                                value={inv.name}
+                                onSelect={() => {
+                                  itemField.onChange(inv._id); // set selected inventory ID
+                                  setOpen(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    inv._id === itemField.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {inv.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+
+            {/* Quantity input */}
+            <FormField
+              control={form.control}
+              name={`usedInventory.${index}.quantity`}
+              render={({ field: qtyField }) => (
+                <FormItem className="w-24">
+                  <FormLabel>Qty</FormLabel>
+                  <FormControl>
+                    {/* Use a numeric input for quantity */}
+                    <Input
+                      type="number"
+                      min={1}
+                      className="input w-full" /* assuming a basic input style or use Input component if available */
+                      {...qtyField}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Remove button */}
+            <Button
+              type="button"
+              variant="destructive"
+              size={"sm"}
+              onClick={() => remove(index)}
+            >
+              Remove
+            </Button>
+          </div>
+        ))}
+
+        {/* Button to add a new inventory field */}
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => append({ item: "", quantity: 1 })}
+        >
+          + Add Item
+        </Button>
 
         <Button type="submit" className="w-full">
           Assign

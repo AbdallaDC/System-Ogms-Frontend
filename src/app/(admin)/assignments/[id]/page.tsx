@@ -76,12 +76,23 @@ interface Assign {
   updatedAt: string;
   assign_id?: string;
   transferHistory?: Array<{
-    from: string;
-    to: string;
+    from: {
+      _id: string;
+      name: string;
+      user_id: string;
+      id: string;
+    };
+    to: {
+      _id: string;
+      name: string;
+      user_id: string;
+      id: string;
+    };
     reason: string;
     date: string;
     _id: string;
   }>;
+
   transferReason?: string;
   transferredBy?: string;
 }
@@ -209,7 +220,7 @@ const AssignDetailPage = () => {
 
   const { assign } = assignData;
 
-  console.log("assign: ", assign.createdBy);
+  // console.log("assign: ", assign.createdBy);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50  p-6">
@@ -365,9 +376,9 @@ const AssignDetailPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className=" gap-8">
                   {/* Vehicle Information */}
-                  <div className="space-y-6">
+                  {/* <div className="space-y-6">
                     <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                       <Car className="h-5 w-5 text-blue-500" />
                       Vehicle Details
@@ -402,7 +413,7 @@ const AssignDetailPage = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Service Information */}
                   <div className="space-y-6">
@@ -530,8 +541,11 @@ const AssignDetailPage = () => {
                                 From
                               </span>
                             </div>
-                            <p className="font-bold text-gray-900">
-                              {transfer.from}
+                            <p className="font-bold text-gray-900 flex flex-col">
+                              {transfer.from.name}
+                              <span className="text-xs font-medium text-slate-700">
+                                {transfer.from.user_id}
+                              </span>
                             </p>
                           </div>
 
@@ -542,8 +556,11 @@ const AssignDetailPage = () => {
                                 To
                               </span>
                             </div>
-                            <p className="font-bold text-gray-900">
-                              {transfer.to}
+                            <p className="font-bold text-gray-900 flex flex-col">
+                              {transfer.to.name}{" "}
+                              <span className="text-xs font-medium text-slate-700">
+                                {transfer.to.user_id}
+                              </span>
                             </p>
                           </div>
 

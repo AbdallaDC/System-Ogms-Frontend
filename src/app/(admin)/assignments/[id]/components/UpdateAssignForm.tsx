@@ -212,7 +212,7 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
             return (
               <FormItem>
                 <FormLabel>Booking</FormLabel>
-                <Popover open={open} onOpenChange={setOpen}>
+                {/* <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -265,7 +265,7 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
                       </CommandGroup>
                     </Command>
                   </PopoverContent>
-                </Popover>
+                </Popover> */}
                 <FormMessage />
               </FormItem>
             );
@@ -286,7 +286,6 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="in-progress">In Progress</SelectItem>
                   <SelectItem value="completed">Completed</SelectItem>
                   <SelectItem value="cancelled">Cancelled</SelectItem>
                 </SelectContent>

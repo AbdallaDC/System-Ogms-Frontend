@@ -42,7 +42,6 @@ import { useState } from "react";
 
 const formSchema = z.object({
   user_id: z.string().min(1, "Please select a user"),
-  vehicle_id: z.string().min(1, "Please select a vehicle"),
   service_id: z.string().min(1, "Please select a service"),
   status: z.enum(["pending", "in_progress", "completed", "cancelled"]),
 });
@@ -60,7 +59,6 @@ function UpdateBookingForm({ onSubmit, onClose, initialData }: any) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       user_id: initialData.user_id?._id,
-      vehicle_id: initialData.vehicle_id?._id,
       service_id: initialData.service_id?._id,
       status: initialData.status as "pending" | "completed" | "cancelled",
     },
@@ -88,14 +86,12 @@ function UpdateBookingForm({ onSubmit, onClose, initialData }: any) {
     const selectedUser = userData?.users.find(
       (user) => user._id === values.user_id
     );
-    const selectedVehicle = vehicleData?.vehicles.find(
-      (vehicle) => vehicle._id === values.vehicle_id
-    );
+
     const selectedService = serviceData?.services.find(
       (service) => service._id === values.service_id
     );
 
-    if (!selectedUser || !selectedVehicle || !selectedService) {
+    if (!selectedUser || !selectedService) {
       return;
     }
 
@@ -108,12 +104,7 @@ function UpdateBookingForm({ onSubmit, onClose, initialData }: any) {
         phone: selectedUser.phone,
         id: selectedUser._id,
       },
-      vehicle_id: {
-        _id: selectedVehicle._id,
-        make: selectedVehicle.make,
-        model: selectedVehicle.model,
-        year: selectedVehicle.year,
-      },
+
       service_id: {
         _id: selectedService._id,
         service_name: selectedService.service_name,
@@ -180,67 +171,6 @@ function UpdateBookingForm({ onSubmit, onClose, initialData }: any) {
                               )}
                             />
                             {user.name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
-        />
-
-        <FormField
-          control={form.control}
-          name="vehicle_id"
-          render={({ field }) => {
-            const [open, setOpen] = useState(false);
-            const selectedVehicle = vehicleData?.vehicles.find(
-              (vehicle) => vehicle._id === field.value
-            );
-            return (
-              <FormItem>
-                <FormLabel>Vehicle</FormLabel>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className="w-full justify-between"
-                      >
-                        {selectedVehicle
-                          ? `${selectedVehicle.make} ${selectedVehicle.model} (${selectedVehicle.year})`
-                          : "Select a vehicle"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
-                    <Command>
-                      <CommandInput placeholder="Search vehicles..." />
-                      <CommandEmpty>No vehicle found.</CommandEmpty>
-                      <CommandGroup>
-                        {vehicleData?.vehicles.map((vehicle) => (
-                          <CommandItem
-                            key={vehicle._id}
-                            value={`${vehicle.make} ${vehicle.model}`}
-                            onSelect={() => {
-                              field.onChange(vehicle._id);
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                vehicle._id === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {vehicle.make} {vehicle.model} ({vehicle.year})
                           </CommandItem>
                         ))}
                       </CommandGroup>

@@ -14,6 +14,9 @@ import {
   Bell,
   Home,
   Sparkles,
+  DollarSign,
+  Package,
+  Store,
 } from "lucide-react";
 import { logout } from "@/utils/logout";
 import { usePathname, useRouter } from "next/navigation";
@@ -30,6 +33,9 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "../notification-bell";
+import { NotificationListResponse } from "@/types/Notification";
+import { useFetch } from "@/hooks/useApi";
 
 export function AdminSidebar() {
   const router = useRouter();
@@ -40,7 +46,7 @@ export function AdminSidebar() {
 
   // Get user data
   const userData = getUser();
-  const { user_id, name, email, phone, role } = userData.user;
+  const { user_id, name, email, phone, role } = userData?.user;
 
   // Handle logout
   const handleLogout = () => {
@@ -81,12 +87,12 @@ export function AdminSidebar() {
           path: "/services",
           badge: null,
         },
-        {
-          name: "Vehicles",
-          icon: <Car className="h-5 w-5" />,
-          path: "/vehicles",
-          badge: null,
-        },
+        // {
+        //   name: "Vehicles",
+        //   icon: <Car className="h-5 w-5" />,
+        //   path: "/vehicles",
+        //   badge: null,
+        // },
         {
           name: "Bookings",
           icon: <Calendar className="h-5 w-5" />,
@@ -105,6 +111,18 @@ export function AdminSidebar() {
           path: "/users",
           badge: null,
         },
+        {
+          name: "Transactions",
+          icon: <DollarSign className="h-5 w-5" />,
+          path: "/transactions",
+          badge: null,
+        },
+        {
+          name: "Inventories",
+          icon: <Package className="h-5 w-5" />,
+          path: "/inventories",
+          badge: null,
+        },
       ],
     },
     {
@@ -116,12 +134,12 @@ export function AdminSidebar() {
           path: "/settings",
           badge: null,
         },
-        {
-          name: "Notifications",
-          icon: <Bell className="h-5 w-5" />,
-          path: "/notifications",
-          badge: notifications,
-        },
+        // {
+        //   name: "Notifications",
+        //   icon: <Bell className="h-5 w-5" />,
+        //   path: "/notifications",
+        //   badge: notifications,
+        // },
       ],
     },
   ];
@@ -150,7 +168,7 @@ export function AdminSidebar() {
         )}
       </button>
 
-      {/* Sidebar Header with Logo */}
+      {/* Sidebar Header with Logo and Notifications */}
       <div className="flex h-16 items-center justify-between border-b border-blue-200 px-4">
         <div className="flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg">
@@ -165,6 +183,7 @@ export function AdminSidebar() {
             </div>
           )}
         </div>
+        {!collapsed && <NotificationBell />}
       </div>
 
       {/* User Profile */}

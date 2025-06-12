@@ -37,6 +37,7 @@ export default function UpdateUserForm({
       email: initialData.email,
       role: initialData.role,
       phone: initialData.phone,
+      address: initialData.address,
       is_active: initialData.is_active,
     },
   });
@@ -110,6 +111,19 @@ export default function UpdateUserForm({
               <FormLabel>Phone</FormLabel>
               <FormControl>
                 <Input placeholder="Enter phone number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter address" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
