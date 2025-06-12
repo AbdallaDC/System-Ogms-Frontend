@@ -360,7 +360,7 @@ const LoginPage = () => {
                     href="#"
                     className="text-gray-300 hover:text-white text-sm transition-colors duration-200 hover:underline"
                   >
-                    Forgot your password?
+                    {/* Forgot your password? */}
                   </a>
                 </div>
               </CardFooter>
