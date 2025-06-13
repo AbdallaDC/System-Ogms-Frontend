@@ -59,6 +59,16 @@ interface Booking {
   status: string;
 }
 
+interface InventoryItem {
+  item: {
+    _id: string;
+    name: string;
+    price: number;
+  };
+  quantity: number;
+  _id: string;
+}
+
 interface Transaction {
   _id: string;
   payment_id: string;
@@ -79,6 +89,7 @@ interface Transaction {
   orderId?: string;
   issuerTransactionId?: string;
   accountType?: string;
+  inventoryItems?: InventoryItem[];
 }
 
 interface TransactionTableProps {
@@ -133,8 +144,11 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
 
   const columns: ColumnDef<Transaction>[] = [
     {
-      accessorKey: "user_id.name",
-      header: "Customer",
+      // accessorKey: "user_id.name",
+      // header: "Customer",
+      accessorKey: "user_id", // Optional, just for column id
+      accessorFn: (row) => row.user_id?.name ?? "", // This enables filtering/sorting
+      id: "customer", // Explicit ID to use as filterColumnId
       cell: ({ row }) => {
         const transaction = row.original;
         return (
@@ -160,23 +174,52 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
         );
       },
     },
+
     {
-      accessorKey: "service_id?.service_name",
-      header: "Service",
+      accessorKey: "service_id",
+      header: "Service / Item",
       cell: ({ row }) => {
         const transaction = row.original;
-        return (
-          <div className="space-y-1">
-            <div className="font-medium text-gray-900">
-              {transaction?.service_id?.service_name}
+
+        // Booking-based (with service)
+        if (transaction.service_id) {
+          return (
+            <div className="space-y-1">
+              <div className="font-medium text-gray-900">
+                {transaction.service_id.service_name}
+              </div>
+              <div className="text-xs text-gray-500">
+                ID: {transaction.service_id.service_id}
+              </div>
             </div>
-            <div className="text-xs text-gray-500">
-              ID: {transaction?.service_id?.service_id}
+          );
+        }
+
+        // Inventory-based (with items)
+        if (
+          transaction.inventoryItems &&
+          transaction.inventoryItems.length > 0
+        ) {
+          return (
+            <div className="space-y-1">
+              {transaction.inventoryItems.map((inv, idx) => (
+                <div key={idx}>
+                  <div className="font-medium text-gray-900">
+                    {inv.item.name}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Qty: {inv.quantity}
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        );
+          );
+        }
+
+        return <span className="text-gray-400 italic">N/A</span>;
       },
     },
+
     {
       accessorKey: "amount",
       header: "Amount",
@@ -274,6 +317,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={() => handleGenerateInvoice(transaction._id)}
+                className="cursor-pointer"
               >
                 <Paperclip className="mr-2 h-4 w-4" />
                 Generate Invoice
@@ -362,12 +406,14 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
     handleExportSelected(allTransactions);
   };
 
+  console.log("transactions", transactions);
+
   return (
     <>
       <DataTable
         columns={columns}
         data={transactions}
-        filterColumnId="customer"
+        filterColumnId="customer" // Optional, just for column id
         filterPlaceholder="Search by customer name..."
         showRowSelection={true}
         showActionButtons={true}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,76 +23,9 @@ import {
   Building,
 } from "lucide-react";
 import { format } from "date-fns";
-import { toast } from "sonner";
 import { useFetch } from "@/hooks/useApi";
 import { generateInvoicePdf } from "@/utils/generateInvoicePdf";
-
-interface InvoiceData {
-  status: string;
-  invoice: {
-    companyName: string;
-    payment: {
-      _id: string;
-      payment_id: string;
-      user_id: {
-        _id: string;
-        name: string;
-        email: string;
-        phone: string;
-      };
-      service_id: {
-        _id: string;
-        service_name: string;
-        description: string;
-        price: number;
-        service_id: string;
-      };
-      booking_id: {
-        _id: string;
-        booking_id: string;
-        booking_date: string;
-        status: string;
-      };
-      phone: string;
-      method: string;
-      item_price: number;
-      labour_fee: number;
-      amount: number;
-      status: string;
-      referenceId: string;
-      transactionId: string;
-      paid_at: string;
-    };
-    customer: {
-      _id: string;
-      name: string;
-      email: string;
-      phone: string;
-    };
-    service: {
-      _id: string;
-      service_name: string;
-      description: string;
-      price: number;
-      service_id: string;
-    };
-    items: Array<{
-      item: {
-        _id: string;
-        name: string;
-        type: string;
-        price: number;
-        inventory_id: string;
-      };
-      quantity: number;
-    }>;
-    total: number;
-    labourFee: number;
-    itemPrice: number;
-    date: string;
-    invoiceId: string;
-  };
-}
+import { InvoiceData } from "@/types/Invoice";
 
 interface InvoiceModalProps {
   isOpen: boolean;
@@ -105,15 +38,11 @@ export default function InvoiceModal({
   onClose,
   paymentId,
 }: InvoiceModalProps) {
-  // const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const {
-    data: invoiceData,
-    isLoading: isLoadingInvoice,
-    error: errorInvoice,
-  } = useFetch<InvoiceData>(`/api/v1/invoices/${paymentId}`);
+  const { data: invoiceData, isLoading: isLoadingInvoice } =
+    useFetch<InvoiceData>(`/api/v1/invoices/${paymentId}`);
+
   const downloadPDF = async () => {
     if (!invoiceData) return;
     generateInvoicePdf(invoiceData.invoice);
@@ -129,20 +58,120 @@ export default function InvoiceModal({
     printWindow.document.write(`
       <html>
         <head>
-          <title>Invoice ${invoiceData?.invoice.invoiceId}</title>
+          <title>Invoice</title>
           <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            .invoice-header { display: flex; justify-content: space-between; margin-bottom: 30px; }
-            .company-info h1 { color: #2563eb; margin: 0; }
-            .invoice-details { text-align: right; }
-            .customer-service { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0; }
-            .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-            .items-table th, .items-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            .items-table th { background-color: #f9fafb; }
-            .totals { text-align: right; margin: 20px 0; }
-            .payment-info { background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0; }
-            .footer { text-align: center; margin-top: 30px; color: #666; }
-            @media print { body { margin: 0; } }
+            body {
+              font-family: Arial, sans-serif;
+              margin: 40px;
+              color: #111827;
+              font-size: 14px;
+            }
+  
+            h1, h2, h3 {
+              color: #1e40af;
+              margin: 0;
+            }
+  
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 24px;
+            }
+  
+            .subtitle {
+              font-size: 12px;
+              color: #6b7280;
+            }
+  
+            .paid-badge {
+              background-color: #d1fae5;
+              color: #065f46;
+              font-size: 12px;
+              padding: 2px 8px;
+              border-radius: 12px;
+              display: inline-block;
+              margin-top: 6px;
+            }
+  
+            .section {
+              margin-bottom: 30px;
+            }
+  
+            .two-col {
+              display: flex;
+              justify-content: space-between;
+              gap: 30px;
+            }
+  
+            .label {
+              font-weight: bold;
+              color: #1e40af;
+              margin-bottom: 8px;
+              display: block;
+            }
+  
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 12px;
+              font-size: 13px;
+            }
+  
+            th, td {
+              border: 1px solid #d1d5db;
+              padding: 8px;
+              vertical-align: top;
+            }
+  
+            th {
+              background-color: #f3f4f6;
+              text-align: left;
+            }
+  
+            .meta {
+              font-size: 11px;
+              color: #6b7280;
+            }
+  
+            .totals {
+              width: 300px;
+              margin-left: auto;
+              margin-top: 20px;
+            }
+  
+            .totals div {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 6px;
+            }
+  
+            .total-bold {
+              font-weight: bold;
+              color: #1d4ed8;
+              font-size: 15px;
+            }
+  
+            .payment-box {
+              background-color: #f9fafb;
+              padding: 16px;
+              border: 1px solid #e5e7eb;
+              border-radius: 8px;
+            }
+  
+            .footer {
+              margin-top: 50px;
+              text-align: center;
+              font-size: 12px;
+              color: #6b7280;
+            }
+  
+            @media print {
+              body {
+                margin: 0;
+                padding: 40px;
+              }
+            }
           </style>
         </head>
         <body>
@@ -150,16 +179,13 @@ export default function InvoiceModal({
         </body>
       </html>
     `);
+
     printWindow.document.close();
     printWindow.print();
   };
 
-  // Fetch data when modal opens
-  // useEffect(() => {
-  //   if (isOpen && paymentId) {
-  //     setInvoiceData(data?.invoice)
-  //   }
-  // }, [isOpen, paymentId]);
+  const invoice = invoiceData?.invoice;
+  const isBookingInvoice = invoice?.type === "booking";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -176,9 +202,8 @@ export default function InvoiceModal({
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             <span className="ml-3 text-gray-600">Loading invoice...</span>
           </div>
-        ) : invoiceData ? (
+        ) : invoice ? (
           <div className="space-y-6">
-            {/* Action Buttons */}
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={printInvoice}>
                 <FileText className="h-4 w-4 mr-2" />
@@ -203,18 +228,16 @@ export default function InvoiceModal({
               </Button>
             </div>
 
-            {/* Invoice Content */}
             <div
               id="invoice-content"
               className="bg-white p-8 rounded-lg border"
             >
-              {/* Header */}
               <div className="flex justify-between items-start mb-8">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Building className="h-6 w-6 text-blue-600" />
                     <h1 className="text-2xl font-bold text-gray-900">
-                      {invoiceData.invoice.companyName}
+                      {invoice.companyName}
                     </h1>
                   </div>
                   <p className="text-gray-600">Professional Auto Service</p>
@@ -225,21 +248,17 @@ export default function InvoiceModal({
                   </h2>
                   <div className="space-y-1 text-sm text-gray-600">
                     <p>
-                      <strong>Invoice ID:</strong>{" "}
-                      {invoiceData.invoice.invoiceId}
+                      <strong>Invoice ID:</strong> {invoice.invoiceId}
                     </p>
                     <p>
                       <strong>Date:</strong>{" "}
-                      {format(
-                        new Date(invoiceData.invoice.date),
-                        "MMM dd, yyyy"
-                      )}
+                      {format(new Date(invoice.date), "MMM dd, yyyy")}
                     </p>
                     <Badge
                       variant="default"
                       className="mt-2 bg-green-100 text-green-800"
                     >
-                      {invoiceData.invoice.payment.status.toUpperCase()}
+                      {invoice.payment.status.toUpperCase()}
                     </Badge>
                   </div>
                 </div>
@@ -247,58 +266,55 @@ export default function InvoiceModal({
 
               <Separator className="mb-6" />
 
-              {/* Customer & Service Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                    <User className="h-4 w-4 text-blue-600" />
-                    Bill To
-                  </h3>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <p className="font-medium text-gray-900">
-                      {invoiceData.invoice.customer.name}
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <Mail className="h-3 w-3" />
-                      {invoiceData.invoice.customer.email}
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <Phone className="h-3 w-3" />
-                      {invoiceData.invoice.customer.phone}
-                    </p>
+                {invoice.customer && (
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                      <User className="h-4 w-4 text-blue-600" />
+                      Bill To
+                    </h3>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p className="font-medium text-gray-900">
+                        {invoice.customer.name}
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <Mail className="h-3 w-3" />
+                        {invoice.customer.email}
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <Phone className="h-3 w-3" />
+                        {invoice.customer.phone}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-blue-600" />
-                    Service Details
-                  </h3>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <p className="font-medium text-gray-900">
-                      {invoiceData.invoice.service.service_name}
-                    </p>
-                    <p>Service ID: {invoiceData.invoice.service.service_id}</p>
-                    <p className="flex items-center gap-2">
-                      <Calendar className="h-3 w-3" />
-                      {format(
-                        new Date(
-                          invoiceData.invoice.payment.booking_id.booking_date
-                        ),
-                        "MMM dd, yyyy"
-                      )}
-                    </p>
-                    <p>
-                      Booking:{" "}
-                      {invoiceData.invoice.payment.booking_id.booking_id}
-                    </p>
+                {isBookingInvoice && invoice.service && invoice.booking && (
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                      <Wrench className="h-4 w-4 text-blue-600" />
+                      Service Details
+                    </h3>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p className="font-medium text-gray-900">
+                        {invoice.service.service_name}
+                      </p>
+                      <p>Service ID: {invoice.service.service_id}</p>
+                      <p className="flex items-center gap-2">
+                        <Calendar className="h-3 w-3" />
+                        {format(
+                          new Date(invoice.booking.booking_date),
+                          "MMM dd, yyyy"
+                        )}
+                      </p>
+                      <p>Booking: {invoice.booking.booking_id}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <Separator className="mb-6" />
 
-              {/* Items Table */}
               <div className="mb-6">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <Package className="h-4 w-4 text-blue-600" />
@@ -308,24 +324,24 @@ export default function InvoiceModal({
                   <table className="w-full border-collapse border border-gray-200">
                     <thead>
                       <tr className="bg-gray-50">
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-900">
+                        <th className="border px-4 py-2 text-left text-sm font-medium text-gray-900">
                           Description
                         </th>
-                        <th className="border border-gray-200 px-4 py-2 text-center text-sm font-medium text-gray-900">
+                        <th className="border px-4 py-2 text-center text-sm font-medium text-gray-900">
                           Qty
                         </th>
-                        <th className="border border-gray-200 px-4 py-2 text-right text-sm font-medium text-gray-900">
+                        <th className="border px-4 py-2 text-right text-sm font-medium text-gray-900">
                           Unit Price
                         </th>
-                        <th className="border border-gray-200 px-4 py-2 text-right text-sm font-medium text-gray-900">
+                        <th className="border px-4 py-2 text-right text-sm font-medium text-gray-900">
                           Total
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {invoiceData.invoice.items.map((item, index) => (
+                      {invoice.items.map((item, index) => (
                         <tr key={index}>
-                          <td className="border border-gray-200 px-4 py-2 text-sm">
+                          <td className="border px-4 py-2 text-sm">
                             <div>
                               <p className="font-medium">{item.item.name}</p>
                               <p className="text-gray-500 text-xs">
@@ -333,67 +349,69 @@ export default function InvoiceModal({
                               </p>
                             </div>
                           </td>
-                          <td className="border border-gray-200 px-4 py-2 text-center text-sm">
+                          <td className="border px-4 py-2 text-center text-sm">
                             {item.quantity}
                           </td>
-                          <td className="border border-gray-200 px-4 py-2 text-right text-sm">
+                          <td className="border px-4 py-2 text-right text-sm">
                             ${item.item.price.toFixed(2)}
                           </td>
-                          <td className="border border-gray-200 px-4 py-2 text-right text-sm font-medium">
+                          <td className="border px-4 py-2 text-right text-sm font-medium">
                             ${(item.item.price * item.quantity).toFixed(2)}
                           </td>
                         </tr>
                       ))}
-                      <tr>
-                        <td className="border border-gray-200 px-4 py-2 text-sm">
-                          <div>
-                            <p className="font-medium">Labor Fee</p>
-                            <p className="text-gray-500 text-xs">
-                              {invoiceData.invoice.service.service_name}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="border border-gray-200 px-4 py-2 text-center text-sm">
-                          1
-                        </td>
-                        <td className="border border-gray-200 px-4 py-2 text-right text-sm">
-                          ${invoiceData.invoice.labourFee.toFixed(2)}
-                        </td>
-                        <td className="border border-gray-200 px-4 py-2 text-right text-sm font-medium">
-                          ${invoiceData.invoice.labourFee.toFixed(2)}
-                        </td>
-                      </tr>
+                      {isBookingInvoice && (
+                        <tr>
+                          <td className="border px-4 py-2 text-sm">
+                            <div>
+                              <p className="font-medium">Labor Fee</p>
+                              <p className="text-gray-500 text-xs">
+                                {invoice.service.service_name}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="border px-4 py-2 text-center text-sm">
+                            1
+                          </td>
+                          <td className="border px-4 py-2 text-right text-sm">
+                            ${invoice.labourFee.toFixed(2)}
+                          </td>
+                          <td className="border px-4 py-2 text-right text-sm font-medium">
+                            ${invoice.labourFee.toFixed(2)}
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
               </div>
 
-              {/* Totals */}
               <div className="flex justify-end mb-6">
                 <div className="w-64 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Items Subtotal:</span>
                     <span className="font-medium">
-                      ${invoiceData.invoice.itemPrice.toFixed(2)}
+                      ${invoice.itemPrice.toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Labor Fee:</span>
-                    <span className="font-medium">
-                      ${invoiceData.invoice.labourFee.toFixed(2)}
-                    </span>
-                  </div>
+                  {isBookingInvoice && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Labor Fee:</span>
+                      <span className="font-medium">
+                        ${invoice.labourFee.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
                   <Separator />
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total Amount:</span>
                     <span className="text-blue-600">
-                      ${invoiceData.invoice.total.toFixed(2)}
+                      ${invoice.total.toFixed(2)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Payment Info */}
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <CreditCard className="h-4 w-4 text-blue-600" />
@@ -403,22 +421,22 @@ export default function InvoiceModal({
                   <div>
                     <p>
                       <strong>Payment Method:</strong>{" "}
-                      {invoiceData.invoice.payment.method.toUpperCase()}
+                      {invoice.payment.method.toUpperCase()}
                     </p>
                     <p>
                       <strong>Transaction ID:</strong>{" "}
-                      {invoiceData.invoice.payment.transactionId}
+                      {invoice.payment.transactionId}
                     </p>
                   </div>
                   <div>
                     <p>
                       <strong>Reference ID:</strong>{" "}
-                      {invoiceData.invoice.payment.referenceId}
+                      {invoice.payment.referenceId}
                     </p>
                     <p>
                       <strong>Payment Date:</strong>{" "}
                       {format(
-                        new Date(invoiceData.invoice.payment.paid_at),
+                        new Date(invoice.payment.paid_at),
                         "MMM dd, yyyy 'at' h:mm a"
                       )}
                     </p>
@@ -426,9 +444,8 @@ export default function InvoiceModal({
                 </div>
               </div>
 
-              {/* Footer */}
               <div className="mt-8 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
-                <p>Thank you for choosing {invoiceData.invoice.companyName}!</p>
+                <p>Thank you for choosing {invoice.companyName}!</p>
                 <p className="mt-1">This is a computer-generated invoice.</p>
               </div>
             </div>

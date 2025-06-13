@@ -1,66 +1,68 @@
-export interface InvoiceData {
-  status: string;
-  invoice: {
-    companyName: string;
-    payment: {
-      _id: string;
-      payment_id: string;
-      user_id: {
-        _id: string;
-        name: string;
-        email: string;
-        phone: string;
-      };
-      service_id: {
-        _id: string;
-        service_name: string;
-        description: string;
-        price: number;
-        service_id: string;
-      };
-      booking_id: {
-        _id: string;
-        booking_id: string;
-        booking_date: string;
-        status: string;
-      };
-      phone: string;
-      method: string;
-      item_price: number;
-      labour_fee: number;
-      amount: number;
-      status: string;
-      referenceId: string;
-      transactionId: string;
-      paid_at: string;
-    };
-    customer: {
-      _id: string;
-      name: string;
-      email: string;
-      phone: string;
-    };
-    service: {
-      _id: string;
-      service_name: string;
-      description: string;
-      price: number;
-      service_id: string;
-    };
-    items: Array<{
-      item: {
-        _id: string;
-        name: string;
-        type: string;
-        price: number;
-        inventory_id: string;
-      };
-      quantity: number;
-    }>;
-    total: number;
-    labourFee: number;
-    itemPrice: number;
-    date: string;
-    invoiceId: string;
+// types/Invoice.ts
+
+export interface InventoryItem {
+  item: {
+    name: string;
+    inventory_id: string;
+    price: number;
   };
+  quantity: number;
+}
+
+export interface Customer {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export interface Payment {
+  method: string;
+  transactionId: string;
+  referenceId: string;
+  status: string;
+  paid_at: string;
+  booking_id?: {
+    booking_id: string;
+    booking_date: string;
+  };
+}
+
+export interface BookingInfo {
+  booking_id: string;
+  booking_date: string;
+}
+
+export interface ServiceInfo {
+  service_name: string;
+  service_id: string;
+}
+
+export interface BaseInvoice {
+  companyName: string;
+  invoiceId: string;
+  date: string;
+  customer: Customer;
+  items: InventoryItem[];
+  itemPrice: number;
+  total: number;
+  payment: Payment;
+  type: "inventory" | "booking";
+}
+
+export interface InventoryInvoice extends BaseInvoice {
+  type: "inventory";
+}
+
+export interface BookingInvoice extends BaseInvoice {
+  type: "booking";
+  service: ServiceInfo;
+  labourFee: number;
+  booking: BookingInfo;
+}
+
+export type Invoice = InventoryInvoice | BookingInvoice;
+
+export interface InvoiceData {
+  status: "success";
+  invoice: Invoice;
 }
