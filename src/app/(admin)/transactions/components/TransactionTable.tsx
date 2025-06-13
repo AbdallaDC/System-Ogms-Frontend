@@ -147,6 +147,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
       // accessorKey: "user_id.name",
       // header: "Customer",
       accessorKey: "user_id", // Optional, just for column id
+      header: "Customer",
       accessorFn: (row) => row.user_id?.name ?? "", // This enables filtering/sorting
       id: "customer", // Explicit ID to use as filterColumnId
       cell: ({ row }) => {
@@ -405,8 +406,6 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
   const handleExportAll = (allTransactions: Transaction[]) => {
     handleExportSelected(allTransactions);
   };
-
-  console.log("transactions", transactions);
 
   return (
     <>
