@@ -127,23 +127,23 @@ export function AdminSidebar() {
         },
       ],
     },
-    {
-      group: "Preferences",
-      items: [
-        {
-          name: "Settings",
-          icon: <Settings className="h-5 w-5" />,
-          path: "/settings",
-          badge: null,
-        },
-        // {
-        //   name: "Notifications",
-        //   icon: <Bell className="h-5 w-5" />,
-        //   path: "/notifications",
-        //   badge: notifications,
-        // },
-      ],
-    },
+    // {
+    //   group: "Preferences",
+    //   items: [
+    //     {
+    //       name: "Settings",
+    //       icon: <Settings className="h-5 w-5" />,
+    //       path: "/settings",
+    //       badge: null,
+    //     },
+    //     // {
+    //     //   name: "Notifications",
+    //     //   icon: <Bell className="h-5 w-5" />,
+    //     //   path: "/notifications",
+    //     //   badge: notifications,
+    //     // },
+    //   ],
+    // },
   ];
 
   if (!mounted) {

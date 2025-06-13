@@ -161,17 +161,17 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
       },
     },
     {
-      accessorKey: "service_id.service_name",
+      accessorKey: "service_id?.service_name",
       header: "Service",
       cell: ({ row }) => {
         const transaction = row.original;
         return (
           <div className="space-y-1">
             <div className="font-medium text-gray-900">
-              {transaction.service_id.service_name}
+              {transaction?.service_id?.service_name}
             </div>
             <div className="text-xs text-gray-500">
-              ID: {transaction.service_id.service_id}
+              ID: {transaction?.service_id?.service_id}
             </div>
           </div>
         );
