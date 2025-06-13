@@ -9,6 +9,7 @@ export interface User {
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
   id: string;
+  address?: string;
 }
 
 export interface UserListResponse {

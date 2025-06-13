@@ -201,15 +201,17 @@ export function AdminSidebar() {
             collapsed ? "justify-center" : "bg-white/60 hover:bg-white/80"
           )}
         >
-          <Avatar className="h-10 w-10 border-2 border-blue-200">
-            <AvatarImage
-              src={`https://api.dicebear.com/7.x/initials/svg?seed=${userData?.user?.name}`}
-              alt={userData?.user?.name}
-            />
-            <AvatarFallback className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
-              {userData?.user?.name?.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
+          <Link href="/profile">
+            <Avatar className="h-10 w-10 border-2 border-blue-200">
+              <AvatarImage
+                src={`https://api.dicebear.com/7.x/initials/svg?seed=${userData?.user?.name}`}
+                alt={userData?.user?.name}
+              />
+              <AvatarFallback className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+                {userData?.user?.name?.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
           {!collapsed && (
             <div className="flex flex-1 flex-col overflow-hidden">
               <span className="truncate font-medium text-blue-900">

@@ -37,7 +37,7 @@ export function NotificationBell() {
   useEffect(() => {
     const interval = setInterval(() => {
       mutate();
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [mutate]);

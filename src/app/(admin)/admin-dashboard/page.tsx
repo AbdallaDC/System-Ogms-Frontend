@@ -20,7 +20,6 @@ import type {
   ServiceReportResponse,
 } from "@/types/Service";
 import { TransactionResponse } from "@/types/Transaction";
-import type { VehicleListResponse } from "@/types/Vehicle";
 import { format } from "date-fns";
 import {
   BarChart3,
@@ -39,6 +38,14 @@ import { BookingStatusChart } from "./components/booking-status-chart";
 import { ServiceReportCard } from "./components/service-report-card";
 import { TransactionChart } from "./components/transaction-chart";
 import { RatingSummaryCard } from "./components/rating-summary-card";
+import { useRouter } from "next/navigation";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function AdminDashboard() {
   const { data: servicesData, isLoading: isLoadingServices } =
@@ -53,6 +60,8 @@ export default function AdminDashboard() {
     useFetch<InventoryListResponse>("/api/v1/inventory");
   const { data: paymentsData, isLoading: isLoadingTransactions } =
     useFetch<TransactionResponse>("/api/v1/payments");
+
+  const router = useRouter();
 
   const isLoading =
     isLoadingServices ||
@@ -287,6 +296,7 @@ export default function AdminDashboard() {
                 Service Performance
               </h2>
               <Button
+                onClick={() => router.push("/services")}
                 variant="outline"
                 className="border-blue-200 text-blue-600 hover:bg-blue-50"
               >
@@ -294,10 +304,35 @@ export default function AdminDashboard() {
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {reportsData.report.map((service, index) => (
-                <ServiceReportCard key={index} service={service} />
-              ))}
+            <div className="">
+              {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"> */}
+
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="space-y-4 p-2">
+                  {reportsData.report.map((service, index) => (
+                    <CarouselItem
+                      key={index}
+                      className="sm:basis-1/2 lg:basis-1/3"
+                    >
+                      {" "}
+                      {/* Responsive sizing */}
+                      <ServiceReportCard service={service} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {reportsData.report.length > 3 && ( // Only show controls when needed
+                  <>
+                    <CarouselPrevious className="ml-4 bg-gradient-to-br from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer" />
+                    <CarouselNext className="mr-4 bg-gradient-to-br from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer" />
+                  </>
+                )}
+              </Carousel>
             </div>
           </div>
         )}

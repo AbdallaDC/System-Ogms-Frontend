@@ -1,4 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Progress } from "@/components/ui/progress";
 import {
   Wrench,
@@ -24,8 +30,8 @@ export function ServiceReportCard({ service }: ServiceReportProps) {
       : 0;
 
   return (
-    <Card className="overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-      <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 pb-3">
+    <Card className="h-full overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 pb-3">
         <CardTitle className="flex items-center text-lg font-semibold">
           <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg mr-3">
             <Wrench className="h-5 w-5 text-white" />

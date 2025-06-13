@@ -1,14 +1,3 @@
-// import React from "react";
-
-// interface TransactionTableProps {
-//   transactions: Transaction[];
-// }
-// const TransactionTable = ({ transactions }: TransactionTableProps) => {
-//   return <div>TransactionTable</div>;
-// };
-
-// export default TransactionTable;
-
 "use client";
 import { DataTable } from "@/components/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -42,6 +31,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { API_BASE_URL, usePost } from "@/hooks/useApi";
 import axios from "axios";
+import { useState } from "react";
+import InvoiceModal from "./invoice-model";
 
 interface User {
   _id: string;
@@ -132,17 +123,12 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
     toast.success(`${label} copied to clipboard`);
   };
 
-  const generateInvoice = async (transaction: Transaction) => {
-    try {
-      const res = await axios.get(
-        `${API_BASE_URL}/api/v1/invoices/${transaction._id}`
-      );
-      console.log(res);
-      toast.success("Invoice generated successfully");
-    } catch (error) {
-      console.error("Error generating invoice:", error);
-      toast.error("Error generating invoice");
-    }
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string>("");
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+
+  const handleGenerateInvoice = (paymentId: string) => {
+    setSelectedPaymentId(paymentId);
+    setIsInvoiceModalOpen(true);
   };
 
   const columns: ColumnDef<Transaction>[] = [
@@ -286,7 +272,9 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => generateInvoice(transaction)}>
+              <DropdownMenuItem
+                onClick={() => handleGenerateInvoice(transaction._id)}
+              >
                 <Paperclip className="mr-2 h-4 w-4" />
                 Generate Invoice
               </DropdownMenuItem>
@@ -375,19 +363,27 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
   };
 
   return (
-    <DataTable
-      columns={columns}
-      data={transactions}
-      filterColumnId="customer"
-      filterPlaceholder="Search by customer name..."
-      showRowSelection={true}
-      showActionButtons={true}
-      onExportSelected={handleExportSelected}
-      onExportAll={handleExportAll}
-      title="Transaction Records"
-      description="Complete list of all payment transactions with advanced filtering and export capabilities"
-      pageSizeOptions={[10, 25, 50, 100]}
-    />
+    <>
+      <DataTable
+        columns={columns}
+        data={transactions}
+        filterColumnId="customer"
+        filterPlaceholder="Search by customer name..."
+        showRowSelection={true}
+        showActionButtons={true}
+        onExportSelected={handleExportSelected}
+        onExportAll={handleExportAll}
+        title="Transaction Records"
+        description="Complete list of all payment transactions with advanced filtering and export capabilities"
+        pageSizeOptions={[10, 25, 50, 100]}
+      />
+
+      <InvoiceModal
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setIsInvoiceModalOpen(false)}
+        paymentId={selectedPaymentId}
+      />
+    </>
   );
 };
 
