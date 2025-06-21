@@ -416,8 +416,8 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
         filterPlaceholder="Search by customer name..."
         showRowSelection={true}
         showActionButtons={true}
-        onExportSelected={handleExportSelected}
-        onExportAll={handleExportAll}
+        // onExportSelected={handleExportSelected}
+        // onExportAll={handleExportAll}
         title="Transaction Records"
         description="Complete list of all payment transactions with advanced filtering and export capabilities"
         pageSizeOptions={[10, 25, 50, 100]}

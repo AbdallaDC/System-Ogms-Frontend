@@ -37,6 +37,7 @@ import toast from "react-hot-toast";
 import UpdateProfileForm from "./components/UpdateProfileForm";
 import ChangePasswordForm from "./components/ChangePasswordForm";
 import { User } from "@/types/User";
+import { logout } from "@/utils/logout";
 
 interface UserTypeResponse {
   status: string;
@@ -79,8 +80,10 @@ const ProfilePage = () => {
   const handleChangePassword = async (data: any) => {
     try {
       await changePassword(data);
-      toast.success("Password changed successfully!");
+      // toast.success("Password changed successfully!");
       setIsChangePasswordModalOpen(false);
+      // logout user after password change
+      logout();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to change password");
     }
