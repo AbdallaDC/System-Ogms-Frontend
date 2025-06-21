@@ -2,7 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useFetch, usePut } from "@/hooks/useApi";
 import { format } from "date-fns";
 import {
@@ -412,10 +418,13 @@ const ServiceDetailsPage = () => {
                       {serviceHistory.result} Records
                     </Badge>
                   </CardTitle>
+                  <CardDescription>
+                    Last 3 service history records
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="space-y-0">
-                    {serviceHistory.history.map((item, index) => (
+                    {serviceHistory.history.slice(0, 3).map((item, index) => (
                       <div
                         key={item.booking_id}
                         className={`p-6 border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition-all duration-300 ${
@@ -605,7 +614,7 @@ const ServiceDetailsPage = () => {
             )}
 
             {/* Quick Actions */}
-            <Card className="overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-2xl">
+            {/* <Card className="overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-2xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-purple-500" />
@@ -629,7 +638,7 @@ const ServiceDetailsPage = () => {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
 

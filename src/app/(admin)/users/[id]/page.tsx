@@ -644,7 +644,7 @@ export default function UserDetailsPage() {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-2xl hover:shadow-3xl transition-all duration-300">
+            {/* <Card className="overflow-hidden border-none bg-white/80 backdrop-blur-sm shadow-2xl hover:shadow-3xl transition-all duration-300">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Tool className="h-5 w-5 text-blue-500" />
@@ -674,7 +674,7 @@ export default function UserDetailsPage() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
 

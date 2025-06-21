@@ -165,13 +165,13 @@ const ProfilePage = () => {
                 </div>
               </div>
             </div>
-            <Button
+            {/* <Button
               className="bg-white/20 hover:bg-white/30 text-white border-white/30 cursor-pointer"
               onClick={() => setIsEditModalOpen(true)}
             >
               <Pencil className="h-5 w-5 mr-2" />
-              Edit Profile 1
-            </Button>
+              Edit Profile 
+            </Button> */}
           </div>
         </div>
 
