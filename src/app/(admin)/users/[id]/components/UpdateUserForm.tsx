@@ -38,6 +38,7 @@ export default function UpdateUserForm({
       role: initialData.role,
       phone: initialData.phone,
       address: initialData.address,
+      password: initialData.password,
       is_active: initialData.is_active,
     },
   });
@@ -92,7 +93,7 @@ export default function UpdateUserForm({
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent className="w-full">
                   <SelectItem value="customer">Customer</SelectItem>
                   <SelectItem value="mechanic">Mechanic</SelectItem>
                   <SelectItem value="admin">Admin</SelectItem>
@@ -124,6 +125,23 @@ export default function UpdateUserForm({
               <FormLabel>Address</FormLabel>
               <FormControl>
                 <Input placeholder="Enter address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
