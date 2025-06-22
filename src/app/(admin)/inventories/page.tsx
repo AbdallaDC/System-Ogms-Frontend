@@ -4,6 +4,8 @@ import { useFetch } from "@/hooks/useApi";
 import { InventoryListResponse } from "@/types/Inventory";
 import React from "react";
 import { InventoryTable } from "./components/inventory-table";
+import { CreditCard, Filter, Sparkles } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const InventoryPage = () => {
   const { data, error, isLoading } =
