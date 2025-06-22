@@ -24,14 +24,28 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react"; // Import icons for show/hide password
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  role: z.enum(["customer", "mechanic", "admin"]),
-  phone: z.string().min(8, "Phone number must be at least 8 digits"),
-  address: z.string().min(2, "Address must be at least 2 characters"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    role: z.enum(["customer", "mechanic", "admin"]),
+    phone: z.string().min(8, "Phone number must be at least 8 digits"),
+    license_plate: z.string().optional(),
+    address: z.string().min(2, "Address must be at least 2 characters"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.role === "customer" &&
+      (!data.license_plate || data.license_plate.trim() === "")
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "License plate is required for customers.",
+        path: ["license_plate"],
+      });
+    }
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -51,13 +65,14 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
       phone: "",
       address: "",
       role: "customer",
+      license_plate: "",
       password: "",
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
         <FormField
           control={form.control}
           name="name"
@@ -110,6 +125,22 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
             </FormItem>
           )}
         />
+        {/* To get the selected role value, use */}
+        {form.watch("role") === "customer" && (
+          <FormField
+            control={form.control}
+            name="license_plate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>License Plate</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter license plate" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="role"
@@ -132,7 +163,6 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="password"

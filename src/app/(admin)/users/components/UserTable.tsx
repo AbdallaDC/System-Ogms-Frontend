@@ -25,9 +25,10 @@ import toast from "react-hot-toast";
 
 interface UserTableProps {
   data: User[];
+  mutate: any;
 }
 
-export default function UserTable({ data }: UserTableProps) {
+export default function UserTable({ data, mutate }: UserTableProps) {
   const { postData } = usePost<User, UserListResponse>(
     "/api/v1/auth/register",
     "/api/v1/users"
@@ -227,6 +228,8 @@ export default function UserTable({ data }: UserTableProps) {
       // console.log("response", response);
 
       toast.success("User added successfully");
+      mutate();
+      window.location.reload();
     } catch (error: any) {
       console.error("Error adding user:", error.response.data.message);
       toast.error(error.response.data.message || "Failed to add user");

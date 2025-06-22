@@ -10,6 +10,7 @@ const Customers = () => {
     data: mechanicsData,
     error: mechanicsError,
     isLoading: isLoadingMechanics,
+    mutate: mutateMechanics,
   } = useFetch<UserListResponse>("/api/v1/users/role/mechanic");
   console.log("mechanicsData", mechanicsData?.users);
 
@@ -17,11 +18,13 @@ const Customers = () => {
     data: adminData,
     error: adminError,
     isLoading: isLoadingAdmins,
+    mutate: mutateAdmins,
   } = useFetch<UserListResponse>("/api/v1/users/role/admin");
   const {
     data: customerData,
     error: customerError,
     isLoading: isLoadingCustomers,
+    mutate: mutateCustomers,
   } = useFetch<UserListResponse>("/api/v1/users/role/customer");
 
   if (isLoadingMechanics || isLoadingAdmins || isLoadingCustomers)
@@ -45,13 +48,21 @@ const Customers = () => {
           <TabsTrigger value="admins">Adminstrations</TabsTrigger>
         </TabsList>
         <TabsContent value="customers">
-          <UserTable data={customerData?.users || []} />;
+          <UserTable
+            data={customerData?.users || []}
+            mutate={mutateCustomers}
+          />
+          ;
         </TabsContent>
         <TabsContent value="mechanics">
-          <UserTable data={mechanicsData?.users || []} />;
+          <UserTable
+            data={mechanicsData?.users || []}
+            mutate={mutateMechanics}
+          />
+          ;
         </TabsContent>
         <TabsContent value="admins">
-          <UserTable data={adminData?.users || []} />;
+          <UserTable data={adminData?.users || []} mutate={mutateAdmins} />;
         </TabsContent>
       </Tabs>
     </>
