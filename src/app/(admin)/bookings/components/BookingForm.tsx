@@ -119,7 +119,7 @@ function BookingForm({ onSubmit, onClose }: BookingFormProps) {
                     <Command>
                       <CommandInput placeholder="Search customers..." />
                       <CommandEmpty>No customer found.</CommandEmpty>
-                      <CommandGroup>
+                      <CommandGroup className="max-h-64 overflow-y-auto">
                         {userData?.users.map((user) => (
                           <CommandItem
                             key={user._id}
@@ -178,7 +178,7 @@ function BookingForm({ onSubmit, onClose }: BookingFormProps) {
                     <Command>
                       <CommandInput placeholder="Search services..." />
                       <CommandEmpty>No service found.</CommandEmpty>
-                      <CommandGroup>
+                      <CommandGroup className="max-h-64 overflow-y-auto">
                         {serviceData?.services.map((service) => (
                           <CommandItem
                             key={service._id}

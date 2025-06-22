@@ -6,6 +6,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Form,
@@ -27,12 +28,11 @@ import {
 } from "@/components/ui/popover";
 import { useFetch } from "@/hooks/useApi";
 import { cn } from "@/lib/utils";
-import { UserListResponse } from "@/types/User";
-import { BookingListResponse } from "@/types/Booking";
+import type { UserListResponse } from "@/types/User";
+import type { BookingListResponse } from "@/types/Booking";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
-import { format } from "date-fns";
-import { InventoryListResponse } from "@/types/Inventory";
+import type { InventoryListResponse } from "@/types/Inventory";
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
@@ -58,6 +58,10 @@ interface AssignFormProps {
 }
 
 function AssignForm({ onSubmit, onClose }: AssignFormProps) {
+  const [userOpen, setUserOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [inventoryOpen, setInventoryOpen] = useState<boolean[]>([]);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,14 +109,13 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
           control={form.control}
           name="user_id"
           render={({ field }) => {
-            const [open, setOpen] = useState(false);
             const selectedUser = userData?.users.find(
               (user) => user._id === field.value
             );
             return (
               <FormItem>
                 <FormLabel>Mechanic</FormLabel>
-                <Popover open={open} onOpenChange={setOpen}>
+                <Popover open={userOpen} onOpenChange={setUserOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -129,14 +132,14 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                     <Command>
                       <CommandInput placeholder="Search mechanics..." />
                       <CommandEmpty>No mechanic found.</CommandEmpty>
-                      <CommandGroup>
+                      <CommandGroup className="max-h-64 overflow-y-auto">
                         {userData?.users.map((user) => (
                           <CommandItem
                             key={user._id}
                             value={user.name}
                             onSelect={() => {
                               field.onChange(user._id);
-                              setOpen(false);
+                              setUserOpen(false);
                             }}
                           >
                             <Check
@@ -164,14 +167,13 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
           control={form.control}
           name="booking_id"
           render={({ field }) => {
-            const [open, setOpen] = useState(false);
             const selectedBooking = bookingData?.bookings.find(
               (booking) => booking._id === field.value
             );
             return (
               <FormItem>
                 <FormLabel>Select booking</FormLabel>
-                <Popover open={open} onOpenChange={setOpen}>
+                <Popover open={bookingOpen} onOpenChange={setBookingOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -186,36 +188,37 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
+                  <PopoverContent
+                    className="w-[--radix-popover-trigger-width] p-0"
+                    align="start"
+                  >
                     <Command>
                       <CommandInput placeholder="Search booking ID..." />
-                      <CommandEmpty>No booking found.</CommandEmpty>
-                      <CommandGroup>
-                        {bookingData?.bookings.map((booking) => (
-                          <CommandItem
-                            key={booking._id}
-                            // value={format(
-                            //   new Date(booking.booking_date),
-                            //   "dd-MM-yyyy"
-                            // )}
-                            value={booking.booking_id}
-                            onSelect={() => {
-                              field.onChange(booking._id);
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                booking._id === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {booking.booking_id}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      <CommandList>
+                        <CommandEmpty>No booking found.</CommandEmpty>
+                        <CommandGroup className="max-h-64 overflow-y-auto">
+                          {bookingData?.bookings.map((booking) => (
+                            <CommandItem
+                              key={booking._id}
+                              value={booking.booking_id}
+                              onSelect={() => {
+                                field.onChange(booking._id);
+                                setBookingOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  booking._id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {booking.booking_id}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
                     </Command>
                   </PopoverContent>
                 </Popover>
@@ -236,14 +239,29 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
               control={form.control}
               name={`usedInventory.${index}.item`}
               render={({ field: itemField }) => {
-                const [open, setOpen] = useState(false);
+                // Initialize inventoryOpen state if needed
+                if (inventoryOpen.length !== fields.length) {
+                  setInventoryOpen((prev) => {
+                    const newArray = [...prev];
+                    newArray[index] = false;
+                    return newArray;
+                  });
+                }
+
                 const selectedInv = inventoryData?.items.find(
                   (inv) => inv._id === itemField.value
                 );
                 return (
                   <FormItem className="flex-1">
                     <FormLabel>Item</FormLabel>
-                    <Popover open={open} onOpenChange={setOpen}>
+                    <Popover
+                      open={inventoryOpen[index] || false}
+                      onOpenChange={(open) => {
+                        const newInventoryOpen = [...inventoryOpen];
+                        newInventoryOpen[index] = open;
+                        setInventoryOpen(newInventoryOpen);
+                      }}
+                    >
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -267,7 +285,9 @@ function AssignForm({ onSubmit, onClose }: AssignFormProps) {
                                 value={inv.name}
                                 onSelect={() => {
                                   itemField.onChange(inv._id); // set selected inventory ID
-                                  setOpen(false);
+                                  const newInventoryOpen = [...inventoryOpen];
+                                  newInventoryOpen[index] = false;
+                                  setInventoryOpen(newInventoryOpen);
                                 }}
                               >
                                 <Check
