@@ -242,6 +242,7 @@ export default function UserTable({ data, mutate }: UserTableProps) {
     <DataTable
       title="Users"
       description="View and manage users"
+      buttonTitle="Add New User"
       columns={columns}
       data={data}
       filterColumnId="email"

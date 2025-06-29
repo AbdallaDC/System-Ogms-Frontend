@@ -80,6 +80,7 @@ interface DataTableProps<TData> {
   pageSizeOptions?: number[];
   title?: string;
   description?: string;
+  buttonTitle?: string;
 }
 
 export function DataTable<TData>({
@@ -97,6 +98,7 @@ export function DataTable<TData>({
   pageSizeOptions = [10, 20, 50, 100],
   title = "Data Table",
   description = "Manage your data with advanced filtering and sorting",
+  buttonTitle = "Add New Record",
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -294,7 +296,7 @@ export function DataTable<TData>({
             className="h-12 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
             <Plus className="mr-2 h-4 w-4" />
-            Add New Record
+            {buttonTitle}
           </Button>
         )}
       </div>
