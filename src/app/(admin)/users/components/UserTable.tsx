@@ -240,6 +240,8 @@ export default function UserTable({ data, mutate }: UserTableProps) {
 
   return (
     <DataTable
+      title="Users"
+      description="View and manage users"
       columns={columns}
       data={data}
       filterColumnId="email"

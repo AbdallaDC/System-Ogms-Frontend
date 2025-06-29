@@ -221,6 +221,8 @@ export default function BookingTable({ data }: BookingTableProps) {
   };
   return (
     <DataTable
+      title="Bookings"
+      description="View and manage bookings"
       columns={columns}
       data={data}
       filterColumnId="userName"

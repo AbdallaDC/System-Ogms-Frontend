@@ -257,11 +257,17 @@ export default function AssignTable({ data }: AssignTableProps) {
       const response = await postData(values as Assign);
 
       toast.success("Assign added successfully!");
+      handleCloseModal();
     } catch (error: any) {
       console.error("Error adding assign:", error.response.data.message);
       toast.error(error.response.data.message || "Failed to add assign");
       return;
     }
+  };
+  const handleCloseModal = () => {
+    setTransferDialogOpen(false);
+    setSelectedAssignForTransfer(null);
+    window.location.reload();
   };
   return (
     <>
@@ -276,16 +282,15 @@ export default function AssignTable({ data }: AssignTableProps) {
               currentUserId={selectedAssignForTransfer.user_id._id}
               currentUserName={selectedAssignForTransfer.user_id.name}
               // onSubmit={handleTransferSubmit}
-              onClose={() => {
-                setTransferDialogOpen(false);
-                setSelectedAssignForTransfer(null);
-              }}
+              onClose={handleCloseModal}
             />
           )}
         </DialogContent>
       </Dialog>
 
       <DataTable
+        title="Assigned Mechanics"
+        description="View and manage assigned mechanics"
         columns={columns}
         data={data}
         filterColumnId="userName"

@@ -157,6 +157,8 @@ export function ServicesTable({ data }: ServicesTableProps) {
 
   return (
     <DataTable
+      title="Services"
+      description="View and manage services"
       columns={columns}
       data={data}
       filterColumnId="service_name"

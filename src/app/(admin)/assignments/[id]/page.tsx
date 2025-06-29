@@ -147,6 +147,7 @@ const AssignDetailPage = () => {
       await putData(values);
       toast.success("Assignment updated successfully");
       setIsEditModalOpen(false);
+      window.location.reload(); // Reload to reflect changes
     } catch (error) {
       toast.error("Failed to update assignment");
       console.error(error);
