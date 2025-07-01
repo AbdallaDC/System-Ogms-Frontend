@@ -96,7 +96,7 @@ export default function AssignTable({ data }: AssignTableProps) {
     {
       id: "userName",
       header: "Assigned User",
-      accessorFn: (row) => row.user_id.name || "N/A", // Handle potential undefined values
+      accessorFn: (row) => row?.user_id?.name || "N/A", // Handle potential undefined values
       cell: ({ row }) => {
         const userName = row.getValue("userName") as string | undefined;
 
@@ -162,9 +162,9 @@ export default function AssignTable({ data }: AssignTableProps) {
 
         return (
           <div className="">
-            {bookingDate
+            {bookingDate && bookingDate !== "N/A"
               ? format(new Date(bookingDate), "MMM dd, yyyy, h:mm a")
-              : ""}
+              : "N/A"}
           </div>
         );
       },

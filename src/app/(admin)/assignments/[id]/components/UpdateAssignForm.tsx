@@ -58,15 +58,11 @@ interface Assign {
   };
   booking_id: {
     _id: string;
-    vehicle_id: {
-      _id: string;
-      make: string;
-      model: string;
-      year: number;
-    };
     service_id: {
       _id: string;
       service_name: string;
+      price?: number;
+      service_id?: string;
     };
     booking_date: string;
     status: string;
@@ -83,7 +79,11 @@ interface UpdateAssignFormProps {
   initialData: Assign;
 }
 
-function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
+function UpdateAssignForm({
+  onSubmit,
+  onClose,
+  initialData,
+}: UpdateAssignFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -212,7 +212,7 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
             return (
               <FormItem>
                 <FormLabel>Booking</FormLabel>
-                {/* <Popover open={open} onOpenChange={setOpen}>
+                <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -221,9 +221,7 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
                         className="w-full justify-between"
                       >
                         {selectedBooking
-                          ? `${selectedBooking.vehicle_id.make} ${
-                              selectedBooking.vehicle_id.model
-                            } - ${format(
+                          ? `${selectedBooking.booking_id} - ${format(
                               new Date(selectedBooking.booking_date),
                               "MMM dd, yyyy"
                             )}`
@@ -240,7 +238,10 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
                         {bookingData?.bookings.map((booking) => (
                           <CommandItem
                             key={booking._id}
-                            value={`${booking.vehicle_id.make} ${booking.vehicle_id.model}`}
+                            value={`${booking.booking_id} - ${format(
+                              new Date(booking.booking_date),
+                              "MMM dd, yyyy"
+                            )}`}
                             onSelect={() => {
                               field.onChange(booking._id);
                               setOpen(false);
@@ -254,8 +255,7 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
                                   : "opacity-0"
                               )}
                             />
-                            {booking.vehicle_id.make} {booking.vehicle_id.model}{" "}
-                            -{" "}
+                            {booking.booking_id} -
                             {format(
                               new Date(booking.booking_date),
                               "MMM dd, yyyy"
@@ -265,7 +265,7 @@ function UpdateAssignForm({ onSubmit, onClose, initialData }: any) {
                       </CommandGroup>
                     </Command>
                   </PopoverContent>
-                </Popover> */}
+                </Popover>
                 <FormMessage />
               </FormItem>
             );

@@ -172,8 +172,8 @@ export function InventoryTable({ data }: InventoryTableProps) {
       description="Manage your inventory items"
       columns={columns}
       data={data}
-      filterColumnId="service_name"
-      filterPlaceholder="Filter services..."
+      filterColumnId="name"
+      filterPlaceholder="Filter inventories..."
       showActionButtons
       //onExportSelected={handleExportSelected}
       onDeleteSelected={handleDeleteSelected}

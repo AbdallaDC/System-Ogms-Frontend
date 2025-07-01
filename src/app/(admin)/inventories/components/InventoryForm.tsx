@@ -49,7 +49,7 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
       name: "",
       type: "spare-part",
       quantity: 0,
-      unit: "",
+      unit: "pcs",
       price: 0,
       description: "",
     },
@@ -91,41 +91,6 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
                   <SelectContent>
                     <SelectItem value="spare-part">Spare Part</SelectItem>
                     <SelectItem value="tool">Tool</SelectItem>
-                    <SelectItem value="consumable">Consumable</SelectItem>
-                    <SelectItem value="equipment">Equipment</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="unit"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Unit</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select unit" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="pcs">Pieces (pcs)</SelectItem>
-                    <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                    <SelectItem value="ltr">Liters (ltr)</SelectItem>
-                    <SelectItem value="m">Meters (m)</SelectItem>
-                    <SelectItem value="box">Box</SelectItem>
-                    <SelectItem value="set">Set</SelectItem>
-                    <SelectItem value="roll">Roll</SelectItem>
-                    <SelectItem value="bottle">Bottle</SelectItem>
-                    <SelectItem value="can">Can</SelectItem>
-                    <SelectItem value="pack">Pack</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

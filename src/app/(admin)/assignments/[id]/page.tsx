@@ -55,12 +55,7 @@ interface Assign {
   };
   booking_id: {
     _id: string;
-    vehicle_id: {
-      _id: string;
-      model: string;
-      year: number;
-      vehicle_id?: string;
-    };
+
     service_id: {
       _id: string;
       service_name: string;
@@ -155,7 +150,7 @@ const AssignDetailPage = () => {
   };
 
   const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "completed":
         return <CheckCircle className="h-5 w-5 text-emerald-500" />;
       case "pending":
@@ -170,7 +165,7 @@ const AssignDetailPage = () => {
   };
 
   const getStatusVariant = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "completed":
         return "success";
       case "pending":
@@ -185,7 +180,7 @@ const AssignDetailPage = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "completed":
         return "from-emerald-500 to-emerald-600";
       case "pending":
@@ -268,10 +263,12 @@ const AssignDetailPage = () => {
                   variant="secondary"
                   className="bg-white/20 text-white border-white/30"
                 >
-                  {format(
-                    new Date(assign.booking_id.booking_date),
-                    "MMMM d, yyyy"
-                  )}
+                  {assign.booking_id?.booking_date
+                    ? format(
+                        new Date(assign.booking_id.booking_date),
+                        "MMMM d, yyyy"
+                      )
+                    : "N/A"}
                 </Badge>
                 {assign.transferHistory &&
                   assign.transferHistory.length > 0 && (
@@ -315,20 +312,20 @@ const AssignDetailPage = () => {
                 <div className="flex items-center gap-6 mb-6">
                   <Avatar className="h-20 w-20">
                     <AvatarImage
-                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${assign?.user_id.name}`}
-                      alt={assign?.user_id.name}
+                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${assign?.user_id?.name}`}
+                      alt={assign?.user_id?.name}
                     />
                     <AvatarFallback className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-2xl">
-                      {assign?.user_id.name?.charAt(0)}
+                      {assign?.user_id?.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900">
-                      {assign?.user_id.name}
+                      {assign?.user_id?.name}
                     </h3>
                     <p className="text-gray-600 text-lg">Mechanic</p>
                     <p className="text-sm text-gray-500">
-                      {assign?.user_id.user_id || assign?.user_id.id}
+                      {assign?.user_id?.user_id || assign?.user_id?.id}
                     </p>
                   </div>
                 </div>
@@ -343,7 +340,7 @@ const AssignDetailPage = () => {
                         Email Address
                       </p>
                       <p className="text-lg font-bold text-gray-900">
-                        {assign?.user_id.email}
+                        {assign?.user_id?.email}
                       </p>
                     </div>
                   </div>
@@ -357,7 +354,7 @@ const AssignDetailPage = () => {
                         Phone Number
                       </p>
                       <p className="text-lg font-bold text-gray-900">
-                        {assign.user_id.phone || "Not provided"}
+                        {assign?.user_id?.phone || "Not provided"}
                       </p>
                     </div>
                   </div>
@@ -433,12 +430,12 @@ const AssignDetailPage = () => {
                             Service Name
                           </p>
                           <p className="text-lg font-bold text-gray-900">
-                            {assign.booking_id.service_id.service_name}
+                            {assign.booking_id?.service_id?.service_name}
                           </p>
                         </div>
                       </div>
 
-                      {assign.booking_id.service_id.price && (
+                      {assign.booking_id?.service_id?.price && (
                         <div className="flex items-center space-x-4 p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors">
                           <div className="p-3 bg-purple-500 rounded-lg">
                             <TrendingUp className="w-6 h-6 text-white" />
@@ -448,7 +445,7 @@ const AssignDetailPage = () => {
                               Service Price
                             </p>
                             <p className="text-lg font-bold text-gray-900">
-                              ${assign.booking_id.service_id.price}
+                              ${assign.booking_id?.service_id?.price}
                             </p>
                           </div>
                         </div>
@@ -469,11 +466,11 @@ const AssignDetailPage = () => {
                       </p>
                     </div>
                     <Badge
-                      variant={getStatusVariant(assign.booking_id.status)}
+                      variant={getStatusVariant(assign.booking_id?.status)}
                       className="text-lg px-4 py-2"
                     >
-                      {getStatusIcon(assign.booking_id.status)}
-                      <span className="ml-2">{assign.booking_id.status}</span>
+                      {getStatusIcon(assign.booking_id?.status)}
+                      <span className="ml-2">{assign.booking_id?.status}</span>
                     </Badge>
                   </div>
                 </div>
@@ -590,7 +587,7 @@ const AssignDetailPage = () => {
             {/* Assignment Status */}
             <Card
               className={`overflow-hidden border-none bg-gradient-to-br ${getStatusColor(
-                assign.status
+                assign?.status
               )} text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105`}
             >
               <CardContent className="p-6">
@@ -659,10 +656,12 @@ const AssignDetailPage = () => {
                     <span className="font-medium">Booking Date</span>
                   </div>
                   <span className="text-sm text-gray-600">
-                    {format(
-                      new Date(assign.booking_id.booking_date),
-                      "MMM d, yyyy"
-                    )}
+                    {assign.booking_id?.booking_date
+                      ? format(
+                          new Date(assign.booking_id?.booking_date),
+                          "MMM d, yyyy"
+                        )
+                      : "N/A"}
                   </span>
                 </div>
               </CardContent>
@@ -737,22 +736,22 @@ const AssignDetailPage = () => {
                     <span>Work In Progress</span>
                     <span
                       className={
-                        assign.status === "in-progress" ||
-                        assign.status === "completed"
+                        assign?.status === "in-progress" ||
+                        assign?.status === "completed"
                           ? "text-emerald-600"
                           : "text-gray-400"
                       }
                     >
-                      {assign.status === "in-progress" ||
-                      assign.status === "completed"
+                      {assign?.status === "in-progress" ||
+                      assign?.status === "completed"
                         ? "✓"
                         : "○"}
                     </span>
                   </div>
                   <Progress
                     value={
-                      assign.status === "in-progress" ||
-                      assign.status === "completed"
+                      assign?.status === "in-progress" ||
+                      assign?.status === "completed"
                         ? 100
                         : 0
                     }
@@ -766,16 +765,16 @@ const AssignDetailPage = () => {
                     <span>Assignment Completed</span>
                     <span
                       className={
-                        assign.status === "completed"
+                        assign?.status === "completed"
                           ? "text-emerald-600"
                           : "text-gray-400"
                       }
                     >
-                      {assign.status === "completed" ? "✓" : "○"}
+                      {assign?.status === "completed" ? "✓" : "○"}
                     </span>
                   </div>
                   <Progress
-                    value={assign.status === "completed" ? 100 : 0}
+                    value={assign?.status === "completed" ? 100 : 0}
                     className="h-2"
                     // indicatorClassName="bg-emerald-500"
                   />
