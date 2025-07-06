@@ -17,6 +17,8 @@ import {
   DollarSign,
   Package,
   Store,
+  ListOrdered,
+  BadgeDollarSign,
 } from "lucide-react";
 import { logout } from "@/utils/logout";
 import { usePathname, useRouter } from "next/navigation";
@@ -115,12 +117,12 @@ export function AdminSidebar() {
         },
         {
           name: "Transactions",
-          icon: <DollarSign className="h-5 w-5" />,
+          icon: <BadgeDollarSign className="h-5 w-5" />,
           path: "/transactions",
           badge: null,
         },
         {
-          name: "Inventories",
+          name: "Services",
           icon: <Package className="h-5 w-5" />,
           path: "/inventories",
           badge: null,

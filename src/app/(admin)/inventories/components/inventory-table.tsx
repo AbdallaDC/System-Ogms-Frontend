@@ -168,7 +168,7 @@ export function InventoryTable({ data }: InventoryTableProps) {
 
   return (
     <DataTable
-      title="Inventories"
+      title="Services"
       description="Manage your inventory items"
       columns={columns}
       data={data}

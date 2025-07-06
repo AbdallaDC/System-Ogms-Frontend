@@ -243,8 +243,9 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
         const phone = row.getValue("phone") as string;
         return (
           <div className="flex items-center gap-2">
-            <Phone className="h-4 w-4 text-blue-500" />
-            <span className="font-mono text-sm">{phone}</span>
+            {phone && <Phone className="h-4 w-4 text-blue-500" />}
+            {/* <Phone className="h-4 w-4 text-blue-500" /> */}
+            <span className="font-mono text-sm">{phone || "N/A"}</span>
           </div>
         );
       },
@@ -259,8 +260,9 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             variant="outline"
             className="bg-blue-50 text-blue-700 border-blue-200"
           >
-            <CreditCard className="h-3 w-3 mr-1" />
-            {method}
+            {method && <CreditCard className="h-3 w-3 mr-1" />}
+            {/* <CreditCard className="h-3 w-3 mr-1" /> */}
+            {method || "N/A"}
           </Badge>
         );
       },
@@ -276,7 +278,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             className="flex items-center gap-1 w-fit"
           >
             {getStatusIcon(status)}
-            {status}
+            {status === "failed" ? "Cancelled" : status}
           </Badge>
         );
       },

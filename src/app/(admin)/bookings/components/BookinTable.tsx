@@ -2,7 +2,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Delete, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Delete, MoreHorizontal, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -21,15 +21,50 @@ import BookingForm from "./BookingForm";
 import { useDelete, usePost } from "@/hooks/useApi";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import AssignModel from "./AssignModel";
+import { Assign, AssignListResponse } from "@/types/Assign";
+
+// Type for the assign request payload
+interface AssignRequest {
+  user_id: string;
+  booking_id: string;
+  usedInventory: Array<{
+    item: string;
+    quantity: number;
+  }>;
+}
 
 interface BookingTableProps {
   data: Booking[];
 }
 
 export default function BookingTable({ data }: BookingTableProps) {
+  const [isAddAsignModalOpen, setIsAddAsignModalOpen] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const handleOpenAddAsignModel = (bookingId: string) => {
+    setSelectedBookingId(bookingId);
+    setIsAddAsignModalOpen(true);
+  };
+  const handleCloseAddAsignModal = () => {
+    setIsAddAsignModalOpen(false);
+    setSelectedBookingId("");
+  };
   const { postData } = usePost<Booking, BookingListResponse>(
     "/api/v1/bookings",
     "/api/v1/bookings"
+  );
+  const { postData: createAssign } = usePost<AssignRequest, AssignListResponse>(
+    "/api/v1/assigns",
+    "/api/v1/assigns"
   );
 
   const { deleteData } = useDelete(`/api/v1/bookings/`, "/api/v1/bookings");
@@ -167,6 +202,12 @@ export default function BookingTable({ data }: BookingTableProps) {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
               <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-blue-500 text-center cursor-pointer"
+                onClick={() => handleOpenAddAsignModel(booking._id)}
+              >
+                Assign
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link href={`/bookings/${booking._id}`}>View details</Link>
               </DropdownMenuItem>
@@ -219,20 +260,82 @@ export default function BookingTable({ data }: BookingTableProps) {
       return;
     }
   };
+
+  const handleAssignBooking = async (values: unknown) => {
+    console.log("Assign form values:", values);
+
+    try {
+      setIsLoading(true);
+      // Transform the form data to match the API structure
+      const assignData: AssignRequest = {
+        user_id: (values as any).user_id,
+        booking_id: (values as any).booking_id,
+        usedInventory: (values as any).usedInventory,
+      };
+
+      const response = await createAssign(assignData);
+
+      toast.success("Assignment created successfully!");
+      handleCloseAddAsignModal();
+      window.location.reload();
+    } catch (error: any) {
+      console.error(
+        "Error creating assignment:",
+        error.response?.data?.message || error.message
+      );
+      toast.error(
+        error.response?.data?.message || "Failed to create assignment"
+      );
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <DataTable
-      title="Bookings"
-      description="View and manage bookings"
-      columns={columns}
-      data={data}
-      filterColumnId="userName"
-      filterPlaceholder="filter by user"
-      showActionButtons
-      //onExportSelected={handleExportSelected}
-      onDeleteSelected={handleDeleteSelected}
-      //onExportAll={handleExportAll}
-      addFormComponent={BookingForm}
-      onAddSubmit={handleAddSubmit}
-    />
+    <>
+      {/* Add Form Dialog */}
+      {isAddAsignModalOpen && (
+        <Dialog
+          open={isAddAsignModalOpen}
+          onOpenChange={setIsAddAsignModalOpen}
+        >
+          <DialogContent className="sm:max-w-md bg-white/95 backdrop-blur-sm border-white/20">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-xl">
+                <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg">
+                  <Plus className="h-5 w-5 text-white" />
+                </div>
+                Add New Record
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Fill in the details below to create a new record in the system.
+              </DialogDescription>
+            </DialogHeader>
+            <AssignModel
+              onClose={handleCloseAddAsignModal}
+              onSubmit={handleAssignBooking}
+              bookingId={selectedBookingId}
+              isLoading={isLoading}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+
+      <DataTable
+        title="Bookings"
+        description="View and manage bookings"
+        columns={columns}
+        data={data}
+        filterColumnId="userName"
+        filterPlaceholder="filter by user"
+        showActionButtons
+        //onExportSelected={handleExportSelected}
+        onDeleteSelected={handleDeleteSelected}
+        //onExportAll={handleExportAll}
+        addFormComponent={BookingForm}
+        onAddSubmit={handleAddSubmit}
+      />
+    </>
   );
 }

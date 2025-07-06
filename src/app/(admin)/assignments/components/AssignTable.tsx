@@ -153,18 +153,19 @@ export default function AssignTable({ data }: AssignTableProps) {
       },
     },
     {
-      id: "bookingDate",
-      header: "Booking Date",
-      accessorFn: (row) => row.booking_id?.booking_date || "N/A", // Handle potential undefined values
+      id: "bookingID",
+      header: "Booking ID",
+      accessorFn: (row) => row.booking_id?.booking_id || "N/A", // Handle potential undefined values
       cell: ({ row }) => {
-        const bookingDate = row.getValue("bookingDate") as string | undefined;
-        console.log("Owner Name:", bookingDate);
+        const bookingID = row.getValue("bookingID") as string | undefined;
+        console.log("row:", row);
 
         return (
           <div className="">
-            {bookingDate && bookingDate !== "N/A"
+            {/* {bookingDate && bookingDate !== "N/A"
               ? format(new Date(bookingDate), "MMM dd, yyyy, h:mm a")
-              : "N/A"}
+              : "N/A"} */}
+            {bookingID ? bookingID : "N/A"}
           </div>
         );
       },
@@ -176,7 +177,7 @@ export default function AssignTable({ data }: AssignTableProps) {
       accessorFn: (row) => row.booking_id?.service_id?.service_name || "N/A", // Handle potential undefined values
       cell: ({ row }) => {
         const serviceName = row.getValue("serviceName") as string | undefined;
-        console.log("Owner Name:", serviceName);
+        // console.log("Owner Name:", serviceName);
 
         return <div className="">{serviceName ? serviceName : "N/A"}</div>;
       },

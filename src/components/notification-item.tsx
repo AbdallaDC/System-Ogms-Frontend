@@ -107,7 +107,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { Notification } from "@/types/Notification";
 import { Button } from "@/components/ui/button";
-import { API_BASE_URL } from "@/hooks/useApi";
+import { API_BASE_URL } from "@/lib/config";
 import toast from "react-hot-toast";
 import { getUser } from "@/utils/getUser";
 

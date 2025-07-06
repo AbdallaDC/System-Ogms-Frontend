@@ -1,13 +1,12 @@
-// "use client";
+"use client";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
 
-export const API_BASE_URL = "https://online-garage-backend.onrender.com";
-// export const API_BASE_URL = "http://localhost:8800";
+import { API_BASE_URL } from "@/lib/config";
 
 // Helper function to get token from localStorage
 const getToken = () => {
-  return localStorage.getItem("token");
+  return typeof window !== "undefined" ? localStorage.getItem("token") : "";
 };
 
 // Axios configuration with dynamic token

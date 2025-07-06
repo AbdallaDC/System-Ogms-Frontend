@@ -1,26 +1,45 @@
+'use client';
+
+import { useFetch } from "@/hooks/useApi";
+import { Booking, BookingListResponse } from "@/types/Booking";
+import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User } from "lucide-react";
 
-interface Booking {
-  _id: string;
-  user_id: {
-    name: string;
-    email: string;
+export function RecentBookingTable() {
+  const { data: bookingsData, isLoading } = useFetch<BookingListResponse>(
+    "/api/v1/bookings"
+  );
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-64" />;
+  }
+
+  const recentBookings =
+    bookingsData?.bookings
+      .sort(
+        (a, b) =>
+          new Date(b.booking_date).getTime() -
+          new Date(a.booking_date).getTime()
+      )
+      .slice(0, 5) || [];
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "bg-amber-100 text-amber-800 bg-amber-900 text-amber-200";
+      case "completed":
+        return "bg-emerald-100 text-emerald-800 bg-emerald-900 text-emerald-200";
+      case "in progress":
+        return "bg-blue-100 text-blue-800 bg-blue-900 text-blue-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 bg-red-900 text-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 bg-gray-800 text-gray-200";
+    }
   };
-  vehicle_id: {
-    model: string;
-    plate_number: string;
-  };
-  booking_date: string;
-  status: string;
-}
 
-interface RecentBookingsTableProps {
-  bookings: Booking[];
-}
-
-export function RecentBookingsTable({ bookings }: RecentBookingsTableProps) {
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
       case "pending":
@@ -37,72 +56,35 @@ export function RecentBookingsTable({ bookings }: RecentBookingsTableProps) {
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead>
-          <tr className="border-b bg-muted/50">
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-              Customer
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-              Vehicle
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-              Date
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
-              Status
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((booking) => (
-            <tr
-              key={booking._id}
-              className="border-b hover:bg-muted/50 transition-colors"
+    <div className="space-y-4">
+      {recentBookings.map((booking) => (
+        <div
+          key={booking._id}
+          className="flex items-center justify-between p-4  rounded-lg transition-colors duration-200 border "
+        >
+          <div className="flex items-center space-x-4">
+            <div className="bg-gradient-to-r  p-3 rounded-full">
+              <User className="h-5 w-5 text-blue-600 " />
+            </div>
+            <div>
+              <div className="font-medium text-gray-900 ">
+                {booking.user_id?.name}
+              </div>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-sm font-medium text-gray-900 ">
+              {format(new Date(booking?.booking_date), "MMM d, yyyy")}
+            </div>
+            <Badge
+              variant={getStatusVariant(booking?.status)}
+              className={`${getStatusColor(booking?.status)} mt-1`}
             >
-              <td className="px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${booking.user_id.name}`}
-                      alt={booking.user_id.name}
-                    />
-                    <AvatarFallback>
-                      {booking.user_id.name?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-medium">{booking.user_id.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {booking.user_id.email}
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="font-medium">{booking.vehicle_id.model}</div>
-                <div className="text-xs text-muted-foreground">
-                  {booking.vehicle_id.plate_number}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="font-medium">
-                  {format(new Date(booking.booking_date), "MMM d, yyyy")}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {format(new Date(booking.booking_date), "h:mm a")}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <Badge variant={getStatusVariant(booking.status)}>
-                  {booking.status}
-                </Badge>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              {booking?.status}
+            </Badge>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

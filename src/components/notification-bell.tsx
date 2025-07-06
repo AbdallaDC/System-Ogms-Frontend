@@ -8,7 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { API_BASE_URL, useFetch } from "@/hooks/useApi";
+import { useFetch } from "@/hooks/useApi";
+import { API_BASE_URL } from "@/lib/config";
+
 import type { NotificationListResponse } from "@/types/Notification";
 import { NotificationItem } from "./notification-item";
 import { Separator } from "@/components/ui/separator";

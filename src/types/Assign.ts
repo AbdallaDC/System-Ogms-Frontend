@@ -20,6 +20,7 @@ export interface AssignService {
 
 export interface AssignBooking {
   _id: string;
+  booking_id: string;
   vehicle_id: AssignVehicle;
   service_id: AssignService;
   booking_date: string; // ISO date string

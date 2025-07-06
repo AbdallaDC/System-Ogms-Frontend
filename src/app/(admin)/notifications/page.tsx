@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { API_BASE_URL, useFetch } from "@/hooks/useApi";
+import { API_BASE_URL } from "@/lib/config";
+import { useFetch } from "@/hooks/useApi";
 import type { NotificationListResponse } from "@/types/Notification";
 import {
   Bell,

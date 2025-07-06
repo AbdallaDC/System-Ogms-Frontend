@@ -7,27 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Customers = () => {
   const {
-    data: mechanicsData,
-    error: mechanicsError,
-    isLoading: isLoadingMechanics,
-    mutate: mutateMechanics,
-  } = useFetch<UserListResponse>("/api/v1/users/role/mechanic");
-  console.log("mechanicsData", mechanicsData?.users);
+    data: usersData,
+    error: userError,
+    isLoading: isLoadingUsers,
+    mutate,
+  } = useFetch<UserListResponse>("/api/v1/users");
 
-  const {
-    data: adminData,
-    error: adminError,
-    isLoading: isLoadingAdmins,
-    mutate: mutateAdmins,
-  } = useFetch<UserListResponse>("/api/v1/users/role/admin");
-  const {
-    data: customerData,
-    error: customerError,
-    isLoading: isLoadingCustomers,
-    mutate: mutateCustomers,
-  } = useFetch<UserListResponse>("/api/v1/users/role/customer");
-
-  if (isLoadingMechanics || isLoadingAdmins || isLoadingCustomers)
+  if (isLoadingUsers)
     return (
       <TableSkeleton
         columns={6}
@@ -37,11 +23,10 @@ const Customers = () => {
         showPagination={true}
       />
     );
-  if (mechanicsError || adminError || customerError)
-    return <div>Error loading data</div>;
+  if (userError) return <div>Error loading data</div>;
   return (
     <>
-      <Tabs defaultValue="customers">
+      {/* <Tabs defaultValue="customers">
         <TabsList>
           <TabsTrigger value="customers">Customers</TabsTrigger>
           <TabsTrigger value="mechanics">Mechanics</TabsTrigger>
@@ -64,7 +49,8 @@ const Customers = () => {
         <TabsContent value="admins">
           <UserTable data={adminData?.users || []} mutate={mutateAdmins} />;
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
+      <UserTable data={usersData?.users || []} mutate={mutate} />
     </>
   );
 };

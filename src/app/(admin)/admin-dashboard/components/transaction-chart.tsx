@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
-import { Transaction } from "@/types/Transaction";
+import { useFetch } from "@/hooks/useApi";
+import { Transaction, TransactionResponse } from "@/types/Transaction";
 import {
   BarChart,
   Bar,
@@ -13,12 +14,19 @@ import {
   Line,
   ComposedChart,
 } from "recharts";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface TransactionChartProps {
-  transactions: Transaction[];
-}
+export function TransactionChart() {
+  const { data: transactionData, isLoading } = useFetch<TransactionResponse>(
+    "/api/v1/payments"
+  );
 
-export function TransactionChart({ transactions }: TransactionChartProps) {
+  if (isLoading) {
+    return <Skeleton className="w-full h-64" />;
+  }
+
+  const transactions = transactionData?.transactions || [];
+
   // Process and group data by day
   const processData = () => {
     const dailyData: Record<
@@ -116,7 +124,7 @@ export function TransactionChart({ transactions }: TransactionChartProps) {
             tick={{ fill: "#6b7280" }}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value) => `$${value}`}
+            tickFormatter={(value) => `${value}`}
           />
           <YAxis
             yAxisId="right"
