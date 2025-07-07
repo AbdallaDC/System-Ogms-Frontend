@@ -44,7 +44,7 @@ export function AdminDashboardClient() {
     useFetch<ServiceReportResponse>("/api/v1/services/get/report");
 
   return (
-    <div className="min-h-screen max-w-7xl bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <div className="space-y-8">
         {/* Header */}
         <div className="flex justify-between items-center">
