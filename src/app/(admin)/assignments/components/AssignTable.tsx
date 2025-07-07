@@ -300,7 +300,7 @@ export default function AssignTable({ data }: AssignTableProps) {
         //onExportSelected={handleExportSelected}
         onDeleteSelected={handleDeleteSelected}
         //onExportAll={handleExportAll}
-        addFormComponent={AssignForm}
+        // addFormComponent={AssignForm}
         onAddSubmit={handleAddSubmit}
       />
     </>
