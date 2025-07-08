@@ -71,7 +71,7 @@ export function AdminDashboardClient() {
 
         {/* Service Reports Section */}
         <div>
-          <div className="flex items-center justify-between mb-6">
+          {/* <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 ">
               Service Performance
             </h2>
@@ -83,7 +83,7 @@ export function AdminDashboardClient() {
               View All Services
               <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
-          </div>
+          </div> */}
           {/* <div className="">
             <Carousel
               opts={{
