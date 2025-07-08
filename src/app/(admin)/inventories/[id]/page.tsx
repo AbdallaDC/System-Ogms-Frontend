@@ -674,8 +674,6 @@ const InventoryDetailPage = () => {
                     <SelectContent>
                       <SelectItem value="spare-part">Spare Part</SelectItem>
                       <SelectItem value="tool">Tool</SelectItem>
-                      <SelectItem value="consumable">Consumable</SelectItem>
-                      <SelectItem value="equipment">Equipment</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
