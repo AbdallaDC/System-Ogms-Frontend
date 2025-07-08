@@ -36,6 +36,7 @@ import {
 import toast from "react-hot-toast";
 import UpdateProfileForm from "./components/UpdateProfileForm";
 import ChangePasswordForm from "./components/ChangePasswordForm";
+import ForgotPasswordForm from "./components/ForgotPasswordForm";
 import { User } from "@/types/User";
 import { logout } from "@/utils/logout";
 
@@ -49,13 +50,13 @@ const ProfilePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
+    useState(false);
   const {
     data: userData,
     error,
     isLoading,
   } = useFetch<UserTypeResponse>(`/api/v1/users/${currentUser?.user?._id}`);
-
-  console.log("userData", userData);
 
   const { putData: updateUser } = usePut(
     `/api/v1/users/${currentUser?.user?._id}`,
@@ -320,6 +321,14 @@ const ProfilePage = () => {
                   Change Password
                   <Settings className="h-4 w-4" />
                 </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between"
+                  onClick={() => setIsForgotPasswordModalOpen(true)}
+                >
+                  Forgot Password
+                  <Settings className="h-4 w-4" />
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -345,6 +354,33 @@ const ProfilePage = () => {
               <ChangePasswordForm
                 onSubmit={handleChangePassword}
                 onClose={() => setIsChangePasswordModalOpen(false)}
+              />
+            </div>
+          </div>
+        )}
+
+        {isForgotPasswordModalOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 w-full max-w-md shadow-2xl border border-white/20">
+              <ForgotPasswordForm
+                onSubmit={async (data) => {
+                  try {
+                    await updateUser({ password: data.password });
+                    toast.success("Password reset successfully!");
+                    setIsForgotPasswordModalOpen(false);
+                    // Optionally, you can log out the user after resetting password
+                    setTimeout(() => {
+                      logout();
+                    }, 1000); // Wait for 1 second before logging out
+                  } catch (error: any) {
+                    toast.error(
+                      error.response?.data?.message ||
+                        "Failed to reset password"
+                    );
+                  }
+                }}
+                onClose={() => setIsForgotPasswordModalOpen(false)}
+                userEmail={profileUser.email}
               />
             </div>
           </div>

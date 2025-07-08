@@ -49,7 +49,7 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
       name: "",
       type: "spare-part",
       quantity: 0,
-      unit: "pcs",
+      unit: "",
       price: 0,
       description: "",
     },
@@ -124,21 +124,12 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
 
           <FormField
             control={form.control}
-            name="price"
+            name="unit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Unit Price ($)</FormLabel>
+                <FormLabel>Unit</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="Enter unit price"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(Number.parseFloat(e.target.value) || 0)
-                    }
-                  />
+                  <Input placeholder="Enter item unit" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

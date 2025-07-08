@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react"; // Import icons for show/hide password
 
+// Add vehicle_name to schema
 const formSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -31,6 +32,7 @@ const formSchema = z
     role: z.enum(["customer", "mechanic", "admin"]),
     phone: z.string().min(8, "Phone number must be at least 8 digits"),
     license_plate: z.string().optional(),
+    vehicle_name: z.string().optional(), // <-- add vehicle_name to schema
     address: z.string().min(2, "Address must be at least 2 characters"),
     password: z.string().min(6, "Password must be at least 6 characters"),
   })
@@ -43,6 +45,16 @@ const formSchema = z
         code: z.ZodIssueCode.custom,
         message: "License plate is required for customers.",
         path: ["license_plate"],
+      });
+    }
+    if (
+      data.role === "customer" &&
+      (!data.vehicle_name || data.vehicle_name.trim() === "")
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Vehicle name is required for customers.",
+        path: ["vehicle_name"],
       });
     }
   });
@@ -66,6 +78,7 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
       address: "",
       role: "customer",
       license_plate: "",
+      vehicle_name: "", // <-- add vehicle_name to defaultValues
       password: "",
     },
   });
@@ -127,20 +140,36 @@ function UserForm({ onSubmit, onClose }: UserFormProps) {
         />
         {/* To get the selected role value, use */}
         {form.watch("role") === "customer" && (
-          <FormField
-            control={form.control}
-            name="license_plate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>License Plate</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter license plate" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <>
+            <FormField
+              control={form.control}
+              name="license_plate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>License Plate</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter license plate" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vehicle_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vehicle Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter vehicle name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
         )}
+
         <FormField
           control={form.control}
           name="role"

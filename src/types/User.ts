@@ -10,6 +10,8 @@ export interface User {
   updatedAt: string; // ISO date string
   id: string;
   address?: string;
+  license_plate?: string; // Optional for customers
+  vehicle_name?: string;
 }
 
 export interface UserListResponse {

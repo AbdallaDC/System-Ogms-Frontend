@@ -682,24 +682,15 @@ const InventoryDetailPage = () => {
                   <Label htmlFor="unit" className="text-sm font-medium">
                     Unit
                   </Label>
-                  <Select
+                  <Input
+                    id="unit"
                     value={editForm.unit}
-                    onValueChange={(value) =>
-                      setEditForm({ ...editForm, unit: value })
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, unit: e.target.value })
                     }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pcs">Pieces (pcs)</SelectItem>
-                      <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                      <SelectItem value="ltr">Liters (ltr)</SelectItem>
-                      <SelectItem value="m">Meters (m)</SelectItem>
-                      <SelectItem value="box">Box</SelectItem>
-                      <SelectItem value="set">Set</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    placeholder="Enter item unit"
+                    className="w-full"
+                  />
                 </div>
               </div>
 
