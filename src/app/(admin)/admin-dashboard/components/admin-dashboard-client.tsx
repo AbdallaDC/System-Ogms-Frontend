@@ -84,7 +84,7 @@ export function AdminDashboardClient() {
               <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
-          <div className="">
+          {/* <div className="">
             <Carousel
               opts={{
                 align: "start",
@@ -109,7 +109,7 @@ export function AdminDashboardClient() {
               <CarouselPrevious className="ml-4 bg-gradient-to-br from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer" />
               <CarouselNext className="mr-4 bg-gradient-to-br from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer" />
             </Carousel>
-          </div>
+          </div> */}
         </div>
 
         {/* Charts and Analytics */}

@@ -19,6 +19,7 @@ import {
   Store,
   ListOrdered,
   BadgeDollarSign,
+  BarChart3,
 } from "lucide-react";
 import { logout } from "@/utils/logout";
 import { usePathname, useRouter } from "next/navigation";
@@ -125,6 +126,12 @@ export function AdminSidebar() {
           name: "Services",
           icon: <Package className="h-5 w-5" />,
           path: "/inventories",
+          badge: null,
+        },
+        {
+          name: "Reports",
+          icon: <BarChart3 className="h-5 w-5" />,
+          path: "/reports",
           badge: null,
         },
       ],

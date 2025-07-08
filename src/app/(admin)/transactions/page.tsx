@@ -143,7 +143,7 @@ const TransactionsPage = () => {
     transactionsData?.transactions.reduce((sum, t) => sum + t.amount, 0) || 0;
   const successfulTransactions =
     transactionsData?.transactions.filter(
-      (t) => t.status.toLowerCase() === "success"
+      (t) => t.status.toLowerCase() === "paid"
     ).length || 0;
   const pendingTransactions =
     transactionsData?.transactions.filter(
