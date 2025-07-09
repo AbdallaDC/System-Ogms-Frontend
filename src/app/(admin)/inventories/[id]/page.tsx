@@ -656,42 +656,20 @@ const InventoryDetailPage = () => {
                 />
               </div>
 
-              {/* Type and Unit Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="type" className="text-sm font-medium">
-                    Item Type
-                  </Label>
-                  <Select
-                    value={editForm.type}
-                    onValueChange={(value) =>
-                      setEditForm({ ...editForm, type: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select item type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="spare-part">Spare Part</SelectItem>
-                      <SelectItem value="tool">Tool</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="unit" className="text-sm font-medium">
-                    Unit
-                  </Label>
-                  <Input
-                    id="unit"
-                    value={editForm.unit}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, unit: e.target.value })
-                    }
-                    placeholder="Enter item unit"
-                    className="w-full"
-                  />
-                </div>
+              {/* Type and  */}
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium">
+                  Item Type
+                </Label>
+                <Input
+                  id="type"
+                  value={editForm.type}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, type: e.target.value })
+                  }
+                  placeholder="Enter item type"
+                  className="w-full"
+                />
               </div>
 
               {/* Quantity and Price Row */}

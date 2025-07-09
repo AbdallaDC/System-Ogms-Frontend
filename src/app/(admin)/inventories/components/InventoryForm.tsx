@@ -25,9 +25,7 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(1, "Item name is required"),
-  type: z.enum(["spare-part", "tool", "consumable", "equipment"], {
-    required_error: "Please select an item type",
-  }),
+  type: z.string().min(1, "Item type is required"),
   quantity: z.number().min(0, "Quantity cannot be negative"),
   // unit: z.string().min(1, "Please select a unit"),
   unit: z.string(),
@@ -47,7 +45,7 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: "spare-part",
+      type: "",
       quantity: 0,
       unit: "",
       price: 0,
@@ -79,20 +77,9 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Item Type</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select item type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="spare-part">Spare Part</SelectItem>
-                    <SelectItem value="tool">Tool</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <Input placeholder="Enter item type" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -116,20 +103,6 @@ function InventoryForm({ onSubmit, onClose }: InventoryFormProps) {
                       field.onChange(Number.parseInt(e.target.value) || 0)
                     }
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="unit"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Unit</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter item unit" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
