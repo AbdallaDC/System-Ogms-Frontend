@@ -156,19 +156,19 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={`https://api.dicebear.com/7.x/initials/svg?seed=${transaction.user_id.name}`}
-                alt={transaction.user_id.name}
+                src={`https://api.dicebear.com/7.x/initials/svg?seed=${transaction.user_id?.name}`}
+                alt={transaction.user_id?.name}
               />
               <AvatarFallback className="bg-blue-500 text-white text-xs">
-                {transaction.user_id.name.charAt(0)}
+                {transaction.user_id?.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
               <div className="font-medium text-gray-900">
-                {transaction.user_id.name}
+                {transaction.user_id?.name}
               </div>
               <div className="text-xs text-gray-500">
-                {transaction.user_id.email}
+                {transaction.user_id?.email}
               </div>
             </div>
           </div>
