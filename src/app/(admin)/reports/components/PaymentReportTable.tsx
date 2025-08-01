@@ -91,11 +91,11 @@ export interface ServiceInfo {
 }
 
 export const defaultQuery = {
-  user: "",
+  user: "all",
   status: "",
   from: "",
   to: "",
-  service: "",
+  service: "all",
   phone: "",
 };
 
@@ -138,7 +138,7 @@ const PaymentReportTable: React.FC<PaymentReportTableProps> = ({
   // Build query string for endpoint
   const buildQueryString = (params: Record<string, string>) => {
     return Object.entries(params)
-      .filter(([_, v]) => v)
+      .filter(([_, v]) => v && v !== "all")
       .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
       .join("&");
   };
@@ -294,9 +294,13 @@ const PaymentReportTable: React.FC<PaymentReportTableProps> = ({
 
   // Helper for user/service display
   const getUserName = (id: string) =>
-    usersData?.users.find((u) => u._id === id)?.name || "";
+    id === "all"
+      ? "All"
+      : usersData?.users.find((u) => u._id === id)?.name || "";
   const getServiceName = (id: string) =>
-    servicesData?.services.find((s) => s._id === id)?.service_name || "";
+    id === "all"
+      ? "All"
+      : servicesData?.services.find((s) => s._id === id)?.service_name || "";
 
   return (
     <div>
@@ -335,6 +339,16 @@ const PaymentReportTable: React.FC<PaymentReportTableProps> = ({
                 <CommandList>
                   <CommandEmpty>No user found.</CommandEmpty>
                   <CommandGroup>
+                    <CommandItem
+                      key="all"
+                      value="All"
+                      onSelect={() => {
+                        setTempQuery((q) => ({ ...q, user: "all" }));
+                        setUserPopoverOpen(false);
+                      }}
+                    >
+                      All
+                    </CommandItem>
                     {usersData?.users.map((user) => (
                       <CommandItem
                         key={user._id}
@@ -376,6 +390,19 @@ const PaymentReportTable: React.FC<PaymentReportTableProps> = ({
                 <CommandList>
                   <CommandEmpty>No service found.</CommandEmpty>
                   <CommandGroup>
+                    <CommandItem
+                      key="all"
+                      value="All"
+                      onSelect={() => {
+                        setTempQuery((q) => ({
+                          ...q,
+                          service: "all",
+                        }));
+                        setServicePopoverOpen(false);
+                      }}
+                    >
+                      All
+                    </CommandItem>
                     {servicesData?.services.map((service) => (
                       <CommandItem
                         key={service._id}

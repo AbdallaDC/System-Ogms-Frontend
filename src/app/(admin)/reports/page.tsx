@@ -163,7 +163,7 @@ const ReportPage = () => {
   // Build query string for endpoint
   const buildQueryString = (params: Record<string, string>) => {
     return Object.entries(params)
-      .filter(([_, v]) => v)
+      .filter(([_, v]) => v && v !== "all")
       .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
       .join("&");
   };
@@ -184,9 +184,13 @@ const ReportPage = () => {
 
   // Helper for user/service display
   const getUserName = (id: string) =>
-    usersData?.users.find((u) => u._id === id)?.name || "";
+    id === "all"
+      ? "All"
+      : usersData?.users.find((u) => u._id === id)?.name || "";
   const getServiceName = (id: string) =>
-    servicesData?.services.find((s) => s._id === id)?.service_name || "";
+    id === "all"
+      ? "All"
+      : servicesData?.services.find((s) => s._id === id)?.service_name || "";
 
   const bookingQueryString = buildQueryString(bookingQuery);
 

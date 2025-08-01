@@ -1,38 +1,36 @@
-import React from "react";
-import { useFetch } from "@/hooks/useApi";
 import { DataTable } from "@/components/data-table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { ChevronsUpDown, CalendarIcon } from "lucide-react";
-import type { ColumnDef } from "@tanstack/react-table";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
 import { Calendar as DatePicker } from "@/components/ui/calendar";
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import type { UserListResponse } from "@/types/User";
+import { useFetch } from "@/hooks/useApi";
 import type { ServiceListResponse } from "@/types/Service";
-import type { Booking } from "@/types/Booking";
+import type { UserListResponse } from "@/types/User";
 import { generateBookingReportPdf } from "@/utils/generateBookingReportPdf";
+import type { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { CalendarIcon, ChevronsUpDown } from "lucide-react";
+import React from "react";
 export interface BookingResponse {
   status: string;
   count: number;
@@ -72,9 +70,9 @@ export interface Mechanic {
 
 export const defaultBookingQuery = {
   status: "all",
-  customer: "",
-  mechanic: "",
-  service: "",
+  customer: "all",
+  mechanic: "all",
+  service: "all",
   from: "",
   to: "",
 };
@@ -127,7 +125,7 @@ const BookingReportTable: React.FC<BookingReportTableProps> = ({
   // Build query string for endpoint
   const buildQueryString = (params: Record<string, string>) => {
     return Object.entries(params)
-      .filter(([_, v]) => v)
+      .filter(([_, v]) => v && v !== "all")
       .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
       .join("&");
   };
@@ -183,11 +181,17 @@ const BookingReportTable: React.FC<BookingReportTableProps> = ({
 
   // Helper for display
   const getCustomerName = (id: string) =>
-    customersData?.users.find((u) => u._id === id)?.name || "";
+    id === "all"
+      ? "All"
+      : customersData?.users.find((u) => u._id === id)?.name || "";
   const getMechanicName = (id: string) =>
-    mechanicsData?.users.find((u) => u._id === id)?.name || "";
+    id === "all"
+      ? "All"
+      : mechanicsData?.users.find((u) => u._id === id)?.name || "";
   const getServiceName = (id: string) =>
-    servicesData?.services.find((s) => s._id === id)?.service_name || "";
+    id === "all"
+      ? "All"
+      : servicesData?.services.find((s) => s._id === id)?.service_name || "";
 
   return (
     <div>
@@ -250,6 +254,16 @@ const BookingReportTable: React.FC<BookingReportTableProps> = ({
                 <CommandList>
                   <CommandEmpty>No customer found.</CommandEmpty>
                   <CommandGroup>
+                    <CommandItem
+                      key="all"
+                      value="All"
+                      onSelect={() => {
+                        setTempQuery((q) => ({ ...q, customer: "all" }));
+                        setCustomerPopoverOpen(false);
+                      }}
+                    >
+                      All
+                    </CommandItem>
                     {customersData?.users.map((user) => (
                       <CommandItem
                         key={user._id}
@@ -291,6 +305,16 @@ const BookingReportTable: React.FC<BookingReportTableProps> = ({
                 <CommandList>
                   <CommandEmpty>No mechanic found.</CommandEmpty>
                   <CommandGroup>
+                    <CommandItem
+                      key="all"
+                      value="All"
+                      onSelect={() => {
+                        setTempQuery((q) => ({ ...q, mechanic: "all" }));
+                        setMechanicPopoverOpen(false);
+                      }}
+                    >
+                      All
+                    </CommandItem>
                     {mechanicsData?.users.map((user) => (
                       <CommandItem
                         key={user._id}
@@ -332,6 +356,16 @@ const BookingReportTable: React.FC<BookingReportTableProps> = ({
                 <CommandList>
                   <CommandEmpty>No service found.</CommandEmpty>
                   <CommandGroup>
+                    <CommandItem
+                      key="all"
+                      value="All"
+                      onSelect={() => {
+                        setTempQuery((q) => ({ ...q, service: "all" }));
+                        setServicePopoverOpen(false);
+                      }}
+                    >
+                      All
+                    </CommandItem>
                     {servicesData?.services.map((service) => (
                       <CommandItem
                         key={service._id}
