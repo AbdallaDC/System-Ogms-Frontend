@@ -762,12 +762,12 @@ const InventoryDetailPage = () => {
               </Button>
               <Button
                 onClick={handleUpdate}
-                disabled={
+{/*                 disabled={
                   isUpdating ||
                   !editForm.name ||
                   !editForm.type ||
                   !editForm.unit
-                }
+                } */}
                 className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
               >
                 {isUpdating ? (
