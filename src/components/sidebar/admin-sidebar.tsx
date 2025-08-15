@@ -123,13 +123,13 @@ export function AdminSidebar() {
           badge: null,
         },
         {
-          name: "YOOOOW",
+          name: "Spare parts",
           icon: <Package className="h-5 w-5" />,
           path: "/inventories",
           badge: null,
         },
         {
-          name: "DAADA",
+          name: "Reports",
           icon: <BarChart3 className="h-5 w-5" />,
           path: "/reports",
           badge: null,
