@@ -123,7 +123,7 @@ export function AdminSidebar() {
           badge: null,
         },
         {
-          name: "Spare parts",
+          name: "YOOOOW",
           icon: <Package className="h-5 w-5" />,
           path: "/inventories",
           badge: null,
