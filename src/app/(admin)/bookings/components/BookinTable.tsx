@@ -323,7 +323,7 @@ export default function BookingTable({ data }: BookingTableProps) {
       )}
 
       <DataTable
-        title="Bookings"
+        title="DDDDDD"
         description="View and manage bookings"
         columns={columns}
         data={data}
