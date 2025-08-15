@@ -168,8 +168,8 @@ export function InventoryTable({ data }: InventoryTableProps) {
 
   return (
     <DataTable
-      title="Services"
-      description="Manage your inventory items"
+      title="Spare Parts"
+      description="Manage your Spare part items"
       columns={columns}
       data={data}
       filterColumnId="name"

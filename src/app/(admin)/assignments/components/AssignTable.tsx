@@ -290,8 +290,8 @@ export default function AssignTable({ data }: AssignTableProps) {
       </Dialog>
 
       <DataTable
-        title="Assigned Mechanics"
-        description="View and manage assigned mechanics"
+        title="Assigned Tasks"
+        description="View and manage assigned tasks"
         columns={columns}
         data={data}
         filterColumnId="userName"

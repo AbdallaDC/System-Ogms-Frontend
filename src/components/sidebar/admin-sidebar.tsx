@@ -105,7 +105,7 @@ export function AdminSidebar() {
           badge: null,
         },
         {
-          name: "Assignments",
+          name: "Assign Tasks",
           icon: <UserCheck className="h-5 w-5" />,
           path: "/assignments",
           badge: null,
@@ -123,7 +123,7 @@ export function AdminSidebar() {
           badge: null,
         },
         {
-          name: "Services",
+          name: "Spare parts",
           icon: <Package className="h-5 w-5" />,
           path: "/inventories",
           badge: null,
