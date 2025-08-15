@@ -323,7 +323,7 @@ export default function BookingTable({ data }: BookingTableProps) {
       )}
 
       <DataTable
-        title="DDDDDD"
+        title="Bookings"
         description="View and manage bookings"
         columns={columns}
         data={data}
@@ -333,7 +333,7 @@ export default function BookingTable({ data }: BookingTableProps) {
         //onExportSelected={handleExportSelected}
         onDeleteSelected={handleDeleteSelected}
         //onExportAll={handleExportAll}
-        addFormComponent={BookingForm}
+        // addFormComponent={BookingForm}
         onAddSubmit={handleAddSubmit}
       />
     </>
