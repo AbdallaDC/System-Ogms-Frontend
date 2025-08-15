@@ -84,7 +84,7 @@ export function AdminSidebar() {
       ],
     },
     {
-      group: "maamulid",
+      group: "Management",
       items: [
         {
           name: "Services",
