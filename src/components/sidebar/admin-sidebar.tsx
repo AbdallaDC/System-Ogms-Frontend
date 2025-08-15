@@ -129,7 +129,7 @@ export function AdminSidebar() {
           badge: null,
         },
         {
-          name: "Reports",
+          name: "DAADA",
           icon: <BarChart3 className="h-5 w-5" />,
           path: "/reports",
           badge: null,
